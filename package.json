@@ -1,43 +1,42 @@
 {
   "name": "highscore",
-  "version": "0.0.0",
   "description": "WebApp for recording performance in physical education.",
-  "main": "server.js",
-  "scripts": {
-    "start": "node ./bin/www",
-    "test": "node --inspect server.js"
-  },
+  "version": "0.0.0",
+  "author": "EliasStar",
+  "license": "AGPL-3.0-or-later",
+  "homepage": "https://github.com/EliasStar/HighScore#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EliasStar/HighScore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EliasStar/HighScore/issues"
   },
   "keywords": [
     "WebApp",
     "performance tracking",
     "PE"
   ],
-  "author": "EliasStar",
-  "license": "AGPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/EliasStar/HighScore/issues"
+  "private": true,
+  "main": "app",
+  "scripts": {
+    "start": "node ./bin/www"
   },
-  "homepage": "https://github.com/EliasStar/HighScore#readme",
   "devDependencies": {
     "nodemon": "^2.0.2",
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "compression": "^1.7.4",
-    "csurf": "^1.11.0",
-    "express": "^4.17.1",
-    "helmet": "^3.21.2",
+    "cookie-parser": "^1.4.4",
+    "debug": "^2.6.9",
+    "express": "^4.16.1",
+    "hbs": "^4.1.0",
+    "http-errors": "^1.6.3",
+    "morgan": "^1.9.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "http-errors": "~1.6.3",
-    "less-middleware": "~2.2.1",
-    "morgan": "~1.9.1",
-    "hbs": "~4.0.4"
+    "compression": "^1.7.4",
+    "csurf": "^1.11.0",
+    "helmet": "^3.21.2"
   }
 }
