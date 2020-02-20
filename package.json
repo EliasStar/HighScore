@@ -18,12 +18,14 @@
     "PE"
   ],
   "private": true,
-  "main": "app",
+  "main": "server",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon src/server.js"
   },
   "devDependencies": {
+    "@types/node": "^13.7.1",
     "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "dependencies": {
@@ -34,7 +36,6 @@
     "http-errors": "^1.6.3",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
     "compression": "^1.7.4",
     "csurf": "^1.11.0",
     "helmet": "^3.21.2"
