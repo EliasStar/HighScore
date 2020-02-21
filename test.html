@@ -1,60 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="en" theme="light">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Test</title>
-        <link rel="stylesheet" href="public/css/common.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="public/css/flex/style.css">
+    <link rel="stylesheet" href="public/css/test.css">
+</head>
 
-    <body>
-        <header id="header">
-            <img src="" alt="Dachsberg Logo">
-            <h1>HighScore</h1>
-            <p>Elias Reiner</p>
-        </header>
-
-        <main>
-            <p id="path">Overview / Koopa Test</p>
-            <div id="container">
-                <header>Koopa Test</header>
-                <table>
-                    <thead>
-                        <td>Name</td>
-                        <td>Score</td>
-                        <td></td>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>Elias*</td>
-                            <td>6min</td>
-                            <td><button></button></td>
-                        </tr>
-                        <tr>
-                            <td>Niklas Bimsmer</td>
-                            <td>30min</td>
-                            <td><button></button></td>
-                        </tr>
-                        <tr>
-                            <td>Ofi</td>
-                            <td>1min</td>
-                            <td><button></button></td>
-                        </tr>
-                    </tbody>
-                </table>
+<body>
+    <main>
+        <div>
+            <div class="container">
+                <p id="path"><a href="">Overview</a>/ Koopa Test</a></p>
             </div>
-        </main>
+            <div class="container">
+                <header>Koopa Test</header>
+                <div class="content">
+                    <table>
+                        <thead>
+                            <td>Name</td>
+                            <td>Score</td>
+                            <td></td>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ofi</td>
+                                <td>1min</td>
+                                <td><button>&gt;
+                                    </button></td>
+                            </tr>
+                            <tr>
+                                <td>Elias*</td>
+                                <td>6min</td>
+                                <td><button>&gt;
+                                    </button></td>
+                            </tr>
+                            <tr>
+                                <td>Niklas Bimsmer</td>
+                                <td>30min</td>
+                                <td><button>&gt;
+                                    </button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="container">
+                <header>Add Entry</header>
+                <div class="content">
+                    <table>
+                        <thead>
+                            <td>Name</td>
+                            <td></td>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Niklas Bimsmer</td>
+                                <td><button>+</button></td>
+                            </tr>
+                            <tr>
+                                <td>Ofi</td>
+                                <td><button>+</button></td>
+                            </tr>
+                            <tr>
+                                <td>Elias*</td>
+                                <td><button>+</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer">
+        <a id="logo" href="/">
+            <img src="public/img/logo.jpg" alt="Dachsberg Logo" />
+            <h1>HighScore</h1>
+        </a>
+        <span id="options">
+            <label for="gender">Geschlecht:</label>
+            <select id="gender">
+                <option value="A" selected>Alle</option>
+                <option value="W">Mädchen</option>
+                <option value="M">Buben</option>
+            </select>
 
-        <footer id="footer">
-            <p>Copyright</p>
-            <nav>
-                <a href="">Impressum</a>
-                <a href="">About</a>
-            </nav>
-            <button>+</button>
-        </footer>
-    </body>
+            <span class="right">
+                <label for="class">Klasse:</label>
+                <select id="class">
+                    <option value="All" selected>Alle</option>
+                    <option value="6A">6A</option>
+                    <option value="6B">6B</option>
+                    <option value="6N">6N</option>
+                    <option value="7A">7A</option>
+                    <option value="7B">7A</option>
+                    <option value="7N">7N</option>
+                </select>
+            </span>
+        </span>
+        <!--span id="buttons">
+            <span>Add</span>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <div class="dropup">
+                <img src="public/img/more.svg" alt="More">
+                <div class="dropup-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+
+        </span-->
+    </footer>
+</body>
 
 </html>
