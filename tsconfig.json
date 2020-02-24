@@ -1,0 +1,26 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ES2015",
+    "module": "CommonJS",
+    // "allowJs": true,                       /* Allow javascript files to be compiled. */
+    // "checkJs": true,                       /* Report errors in .js files. */
+    "outDir": "./build/",
+    "removeComments": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "strict": true,
+    // "noUnusedLocals": true,                /* Report errors on unused locals. */
+    // "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    "esModuleInterop": true,
+    "preserveSymlinks": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*",
+    "routes/**/*"
+  ],
+  "exclude": []
+}

@@ -1,5 +1,5 @@
+import http from "http";
 var app = require('app');
-var http = require('http');
 
 var port = 80;
 app.set('port', port);

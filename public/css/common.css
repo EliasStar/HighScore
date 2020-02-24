@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+:root {
+    --border-width: 1px;
+    --border-radius: 5px;
+}
+
+:root[theme=light] {
+    --foreground-color: white;
+    --text-color: #434b4f;
+    --hover-color: black;
+    --border-color: #d3e0e9;
+
+    --button-border-color: #ccc;
+    --button-hover-background-color: #e5e5e5;
+    --button-hover-border-color: #adadad;
+    --button-press-background-color: #d4d4d4;
+    --button-press-border-color: #8c8c8c;
+}
+
+:root[theme=dark] {
+    --foreground-color: black;
+    --text-color: #BCB4B0;
+    --hover-color: white;
+    --border-color: #2C1F16;
+
+    --button-border-color: #333333;
+    --button-hover-background-color: #1A1A1A;
+    --button-hover-border-color: #525252;
+    --button-press-background-color: #2B2B2B;
+    --button-press-border-color: #737373;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+*:focus {
+    outline: none;
+}
+
+a {
+    text-decoration: underline dotted;
+    color: var(--text-color);
+}
+
+a:hover,
+a:active {
+    color: var(--hover-color);
+}
+
+.btn {
+    background-color: var(--foreground-color);
+    border: var(--border-width) solid var(--button-border-color);
+    border-radius: var(--border-radius);
+}
+
+.btn:hover {
+    background-color: var(--button-hover-background-color);
+    border-color: var(--button-hover-border-color);
+}
+
+.btn:active {
+    background-color: var(--button-press-background-color);
+    border-color: var(--button-press-border-color);
+}

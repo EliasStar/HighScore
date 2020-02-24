@@ -1,0 +1,6 @@
+#path {
+    font-size: 10pt;
+    font-style: italic;
+    padding: 7px 15px;
+    border-radius: var(--border-radius);
+}
