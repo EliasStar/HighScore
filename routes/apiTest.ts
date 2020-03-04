@@ -1,9 +1,9 @@
-const http2 = require('http2');
-const express = require('express');
+import express from 'express';
+import http2 from 'http2';
 const router = express.Router();
 
-router.get('/', function (_req, _res, _next) {
-    _res.setHeader('content-type', 'text/plain')
+router.get('/', (request, response) => {
+    response.setHeader('content-type', 'text/plain')
 
     let body = 'request=studentList';
 
@@ -17,18 +17,18 @@ router.get('/', function (_req, _res, _next) {
         'content-length': Buffer.byteLength(body)
     });
 
-    _res.write('REQUEST\n\n');
+    response.write('REQUEST\n\n');
 
     for (const name in req.sentHeaders) {
-        _res.write(`${name}: ${req.sentHeaders[name]}\n`);
+        response.write(`${name}: ${req.sentHeaders[name]}\n`);
     }
-    _res.write(body);
+    response.write(body);
 
-    _res.write('\n\n\nRESPONSE\n\n');
+    response.write('\n\n\nRESPONSE\n\n');
 
     req.on('response', (headers, flags) => {
         for (const name in headers) {
-            _res.write(`${name}: ${headers[name]}\n`);
+            response.write(`${name}: ${headers[name]}\n`);
         }
     });
 
@@ -36,10 +36,10 @@ router.get('/', function (_req, _res, _next) {
     let data = '';
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
-        _res.end(`\n${data}`);
+        response.end(`\n${data}`);
         client.close();
     });
     req.end(body);
 });
 
-module.exports = router;
+export default router;
