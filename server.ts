@@ -3,8 +3,9 @@ import http from 'http';
 import https from 'https';
 import express from 'express';
 import { join } from 'path';
-import logger from 'morgan';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import compression from 'compression';
 
 import indexRouter from './routes/index';
 import apiTestRouter from './routes/index';
@@ -35,9 +36,9 @@ app.set('view engine', 'hbs');
 //Middleware
 app.use(express.static(join(__dirname, 'public')));
 app.use(cookieParser());
-//? app.use(express.json());
-//? app.use(express.urlencoded());
-app.use(logger('dev'));
+app.use(helmet());
+app.use(compression());
+app.use(express.json());
 
 //Routes
 app.use('/', indexRouter);
