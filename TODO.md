@@ -1,6 +1,6 @@
 # ToDo
 
-- [ ] CSRF protection
+- [x] CSRF protection
 - [ ] logging
 - [ ] error handling
 - [ ] 404 handling

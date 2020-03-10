@@ -1,14 +1,16 @@
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import { join } from 'path';
-import cookieParser from 'cookie-parser';
+import cookies from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
+import csurf from 'csurf';
 
 import indexRouter from './routes/index';
-import apiTestRouter from './routes/index';
+import apiTestRouter from './routes/apiTest';
+import viewTestRouter from './routes/viewTest';
 
 // HTTP Redirect Server
 const httpPort = process.env.HTTP_PORT || '80';
@@ -35,22 +37,36 @@ app.set('view engine', 'hbs');
 
 //Middleware
 app.use(express.static(join(__dirname, 'public')));
-app.use(cookieParser());
+app.use(express.json());
+app.use(cookies());
 app.use(helmet());
 app.use(compression());
-app.use(express.json());
+app.use(csurf({
+    cookie: {
+        key: 'csrfToken',
+        signed: true,
+        secure: true,
+        httpOnly: true,
+        sameSite: true
+    },
+    value: (req) => {
+        return req.body.csrfToken;
+    }
+}));
 
 //Routes
 app.use('/', indexRouter);
 app.use('/apiTest', apiTestRouter);
+app.use('/viewTest', viewTestRouter);
 
-//404 Handler
+//Error Handlers
 app.use((req, res, nxt) => {
-    //TODO 404 Handler
-    res.sendStatus(404);
+    res.status(404).redirect('/');
 });
 
-//TODO Error Handler
+app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
+    res.status(500).render('error', { error: err });
+}));
 
 https.createServer({
     key: fs.readFileSync('key/server.key'),
