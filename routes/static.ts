@@ -2,7 +2,7 @@ import express from 'express';
 import http2 from 'http2';
 const router = express.Router();
 
-router.get('/', (request, response) => {
+router.get('/apiTest', (request, response) => {
     response.setHeader('content-type', 'text/plain')
 
     let body = 'request=studentList';

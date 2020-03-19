@@ -1,2 +1,60 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<html lang="" theme="light">
+
+<head>
+    <meta charset=" UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{csrfToken}}">
+    <title>HighScore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js" defer></script>
+    <script src="js/dropup.js" defer></script>
+</head>
+
+<body>
+    <main>
+
+    </main>
+    <footer id="footer">
+        <a id="logo">
+            <img src="img/logo.jpg" alt="Dachsberg Logo" />
+            <h1>HighScore</h1>
+        </a>
+
+        <span id="options">
+            <span>
+                <label for="gender">Geschlecht:</label>
+                <select id="gender">
+                    <option value="A" selected>Alle</option>
+                    <option value="W">Mädchen</option>
+                    <option value="M">Buben</option>
+                </select>
+
+                <span class="right">
+                    <label for="class">Klasse:</label>
+                    <select id="class">
+                        <option value="All" selected>Alle</option>
+                        {{#each classes}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    </select>
+                </span>
+            </span>
+        </span>
+
+        <span id="buttons">
+            <button id="add-button" class="btn" type="button"><img src="img/plus-light.svg" alt="Add"></button>
+            <button id="theme-button" class="btn" type="button">
+                <img id="icon-dark" src="img/dark.svg" alt="Switch Theme">
+                <img id="icon-light" src="img/light.svg" alt="Switch Theme">
+            </button>
+            <button id="dropup-button" class="btn" type="button"><img src="img/more-light.svg" alt="More"></button>
+            <nav id="dropup">
+                <a>Über</a>
+                <a>Lang buttons lol</a>
+                <a>Hilfe</a>
+            </nav>
+        </span>
+    </footer>
+</body>
+
+</html>

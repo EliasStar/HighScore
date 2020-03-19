@@ -7,3 +7,4 @@
 - [ ] database integration
 - [ ] 5xx handling
 - [ ] routes & views
+- [ ] i18n

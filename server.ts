@@ -3,14 +3,16 @@ import http from 'http';
 import https from 'https';
 import express, { ErrorRequestHandler } from 'express';
 import { join } from 'path';
-import cookies from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import csurf from 'csurf';
 
 import indexRouter from './routes/index';
-import apiTestRouter from './routes/apiTest';
-import viewTestRouter from './routes/viewTest';
+import studentRouter from './routes/student';
+import teacherRouter from './routes/teacher';
+import commonRouter from './routes/common';
+import staticRouter from './routes/static';
 
 // HTTP Redirect Server
 const httpPort = process.env.HTTP_PORT || '80';
@@ -38,7 +40,7 @@ app.set('view engine', 'hbs');
 //Middleware
 app.use(express.static(join(__dirname, 'public')));
 app.use(express.json());
-app.use(cookies());
+app.use(cookieParser(process.env.COOKIE_SECRET || 'secret'));
 app.use(helmet());
 app.use(compression());
 app.use(csurf({
@@ -47,7 +49,7 @@ app.use(csurf({
         signed: true,
         secure: true,
         httpOnly: true,
-        sameSite: true
+        sameSite: true,
     },
     value: (req) => {
         return req.body.csrfToken;
@@ -56,8 +58,10 @@ app.use(csurf({
 
 //Routes
 app.use('/', indexRouter);
-app.use('/apiTest', apiTestRouter);
-app.use('/viewTest', viewTestRouter);
+app.use('/student', studentRouter);
+app.use('/teacher', teacherRouter);
+app.use('/common', commonRouter);
+app.use('/static', staticRouter);
 
 //Error Handlers
 app.use((req, res, nxt) => {
@@ -65,7 +69,7 @@ app.use((req, res, nxt) => {
 });
 
 app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
-    res.status(500).render('error', { error: err });
+    res.status(500).render('common/error', { error: err });
 }));
 
 https.createServer({
