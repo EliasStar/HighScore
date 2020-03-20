@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import csurf from 'csurf';
+import hbs from 'hbs';
 
 import indexRouter from './routes/index';
 import studentRouter from './routes/student';
@@ -34,8 +35,10 @@ const app = express();
 
 //Options
 app.set('port', httpsPort);
-app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.set('views', join(__dirname, 'views'));
+hbs.registerPartials(join(__dirname, 'views'));
+
 
 //Middleware
 app.use(express.static(join(__dirname, 'public')));

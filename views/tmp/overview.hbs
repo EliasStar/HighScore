@@ -1,0 +1,29 @@
+<div>
+    <div class="container">
+        <p id="path">Übersicht / {{sport.name}}</p>
+    </div>
+    <div class="container">
+        <header>{{sport.name}}</header>
+        <div class="content">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>{{sport.unitName}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each entries}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{this.score}} {{sport.unit}}</td>
+                        <td><button>&gt;
+                            </button></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

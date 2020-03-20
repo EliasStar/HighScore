@@ -8,3 +8,4 @@
 - [ ] 5xx handling
 - [ ] routes & views
 - [ ] i18n
+- [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)
