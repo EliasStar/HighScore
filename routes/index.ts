@@ -1,21 +1,28 @@
 import express from 'express';
 const router = express.Router();
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     res.render('index', {
-        view: 'overview',
+        currentContainer: 'overview',
+        csrfToken: req.csrfToken(),
         sports: [
             {
-                name: '100m',
-                score: '5.5s'
+                id: '100m',
+                name: '100m Sprint',
+                score: '5.5',
+                unitSymbol: 's'
             },
             {
-                name: '400m',
-                score: '9.34s'
+                id: '400m',
+                name: '400m Sprint',
+                score: '9.34',
+                unitSymbol: 's'
             },
             {
+                id: 'RopeSkipping',
                 name: 'Seil springen',
-                score: '10000x'
+                score: '10000',
+                unitSymbol: 'x'
             }
         ],
         teacher: false,

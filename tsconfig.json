@@ -9,7 +9,6 @@
     "importHelpers": true,
     "isolatedModules": true,
     "strict": true,
-    "noUnusedLocals": true,
     "esModuleInterop": true,
     "preserveSymlinks": true,
     "forceConsistentCasingInFileNames": true

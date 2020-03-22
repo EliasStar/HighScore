@@ -1,32 +1,30 @@
 <div id="current-container">
     <meta name="csrf-token" content="{{csrfToken}}">
     <div class="container">
-        <p id="path">Übersicht</p>
+        <p id="path">
+            <span id="path-overview" class="path-button clickable link hover">Übersicht</span> / {{sport.name}}
+        </p>
     </div>
     <div class="container">
-        <header>Übersicht</header>
+        <header>{{sport.name}}</header>
         <div class="content">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Sport</th>
-                        <th>Bestes Ergebnis</th>
+                        <th>{{sport.unit}}</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each sports}}
+                    {{#each scores}}
                     <tr>
-                        <td>{{name}}</td>
-                        <td>{{score}} {{unitSymbol}}</td>
-                        <td><span id="sport-{{id}}"
-                                class="next-button clickable btn-icon icon icon-circle-arrow-right"></span>
-                        </td>
+                        <td>{{this}} {{@root.sport.unitSymbol}}</td>
+                        <td></td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
         </div>
     </div>
-    <script src="js/overview.js"></script>
+    <script src="js/sport.js"></script>
 </div>

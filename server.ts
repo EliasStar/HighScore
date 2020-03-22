@@ -20,7 +20,7 @@ const httpPort = process.env.HTTP_PORT || '80';
 
 http.createServer((req, res) => {
     console.log('Redirected request from HTTP to HTTPS!')
-    res.writeHead(303, {
+    res.writeHead(301, {
         'Location': 'https://' + req.headers.host?.replace(httpPort.toString(), httpsPort.toString()) + req.url
     });
     res.end();
@@ -68,11 +68,21 @@ app.use('/static', staticRouter);
 
 //Error Handlers
 app.use((req, res, nxt) => {
-    res.status(404).redirect('/');
+    res.redirect('/');
 });
 
 app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
-    res.status(500).render('common/error', { error: err });
+    if (res.headersSent) {
+        return nxt(err);
+    }
+
+    //! HELP! kp warum des nd funkt
+    //if (process.env.NODE_ENV !== 'production') {
+    console.error(err.stack);
+    res.status(500).send(err.stack);
+    //} else {
+    //   res.status(500).end();
+    //}
 }));
 
 https.createServer({

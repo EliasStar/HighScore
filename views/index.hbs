@@ -1,19 +1,44 @@
 <html lang="" theme="light">
 
 <head>
-    <meta charset=" UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{csrfToken}}">
     <title>HighScore</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/glyphicons.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="js/client.js" defer></script>
+    <script src="js/path.js" defer></script>
     <script src="js/theme.js" defer></script>
     <script src="js/dropup.js" defer></script>
 </head>
 
 <body>
     <main>
-        {{> (lookup . 'view') }}
+        <div id="loading-container">
+            <div class="container">
+                <p id="path">Laden...</p>
+            </div>
+            <div class="container">
+                <header>Laden...</header>
+                <div class="content">
+                    <span class="spin icon icon-refresh"></span>
+                </div>
+            </div>
+        </div>
+        <div id="error-container">
+            <div class="container">
+                <p id="path">Übersicht / Fehler</p>
+            </div>
+            <div class="container">
+                <header>Fehler</header>
+                <div class="content">
+                    <div class="error-message">
+                        <p class="error-title"></p>
+                        <p class="error-description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{> (lookup . 'currentContainer') }}
     </main>
     <footer id="footer">
         <span id="logo" class="clickable hover">
@@ -21,9 +46,10 @@
             <h1>HighScore</h1>
         </span>
 
-        {{#if teacher}}
+
         <span id="options">
             <span>
+                {{#if teacher}}
                 <label for="gender">Geschlecht:</label>
                 <select id="gender">
                     <option value="A" selected>Alle</option>
@@ -40,14 +66,16 @@
                         {{/each}}
                     </select>
                 </span>
+                {{/if}}
             </span>
         </span>
-        {{/if}}
 
         <span id="buttons">
+            {{#if teacher}}
             <button id="add-button" class="btn clickable" type="button">
                 <img src="img/plus.svg" alt="Add">
             </button>
+            {{/if}}
             <button id="theme-button" class="btn clickable" type="button">
                 <img id="icon-dark" src="img/dark.svg" alt="Switch Theme">
                 <img id="icon-light" src="img/light.svg" alt="Switch Theme">
