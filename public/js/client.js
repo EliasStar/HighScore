@@ -1,4 +1,3 @@
-'use strict';
 let main;
 let currentContainer;
 let loadingContainer;
@@ -7,9 +6,7 @@ let errorContainer;
 let errorContainerTitle;
 let errorContainerDescription;
 
-window.addEventListener('load', initClient)
-
-function initClient() {
+window.addEventListener('load', () => {
     main = document.querySelector('main');
     currentContainer = document.getElementById('current-container');
     loadingContainer = document.getElementById('loading-container');
@@ -17,9 +14,7 @@ function initClient() {
 
     errorContainerTitle = errorContainer.querySelector('.error-title');
     errorContainerDescription = errorContainer.querySelector('.error-description');
-
-    initContainer();
-}
+});
 
 function getContainer(path, params) {
     currentContainer.remove();
@@ -39,7 +34,6 @@ function getContainer(path, params) {
             let container = new DOMParser().parseFromString(await response.text(), "text/html").getElementById('current-container');
             loadingContainer.style.display = 'none';
             currentContainer = main.appendChild(container);
-            initPath();
             initContainer();
         }
     }).catch(err => {
@@ -54,8 +48,4 @@ function getContainer(path, params) {
         errorContainer.style.display = 'block';
         return;
     });
-}
-
-function postData(path, csrfToken, callback) {
-
 }

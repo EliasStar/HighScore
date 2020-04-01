@@ -1,5 +1,4 @@
 <div id="current-container">
-    <meta name="csrf-token" content="{{csrfToken}}">
     <div class="container">
         <p id="path">Übersicht</p>
     </div>
@@ -18,8 +17,14 @@
                     {{#each sports}}
                     <tr>
                         <td>{{name}}</td>
-                        <td>{{score}} {{unitSymbol}}</td>
-                        <td><span id="sport-{{id}}"
+                        <td>
+                            {{score}}{{unitSymbol}}
+                            {{#if student}}
+                            ({{student}})
+                            {{/if}}
+                        </td>
+                        <td>
+                            <span id="sport-{{id}}"
                                 class="next-button clickable btn-icon icon icon-circle-arrow-right"></span>
                         </td>
                     </tr>
@@ -28,5 +33,4 @@
             </table>
         </div>
     </div>
-    <script src="/public/js/overview.js"></script>
 </div>

@@ -1,6 +1,8 @@
 <div>
     <div class="container">
-        <p id="path">Übersicht / {{sport.name}}</p>
+        <p id="path">
+            <span id="path-overview" class="path-button clickable link hover">Übersicht</span> / {{sport.name}}
+        </p>
     </div>
     <div class="container">
         <header>{{sport.name}}</header>
@@ -16,10 +18,12 @@
                 <tbody>
                     {{#each entries}}
                     <tr>
-                        <td>{{this.name}}</td>
-                        <td>{{this.score}} {{sport.unit}}</td>
-                        <td><button>&gt;
-                            </button></td>
+                        <td>{{name}}</td>
+                        <td>{{score}}{{@root.sport.unit}}</td>
+                        <td>
+                            <span id="sport-{{@root.sport.id}}-student-{{id}}"
+                                class="next-button clickable btn-icon icon icon-circle-arrow-right"></span>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>

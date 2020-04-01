@@ -3,23 +3,24 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     res.render('index', {
-        currentContainer: 'overview',
-        csrfToken: req.csrfToken(),
+        currentContainer: 'private/overview',
         sports: [
             {
-                id: '100m',
+                id: '1',
                 name: '100m Sprint',
                 score: '5.5',
-                unitSymbol: 's'
+                unitSymbol: 's',
+                student: 'Ich'
             },
             {
-                id: '400m',
+                id: '2',
                 name: '400m Sprint',
                 score: '9.34',
-                unitSymbol: 's'
+                unitSymbol: 's',
+                student: 'Du'
             },
             {
-                id: 'RopeSkipping',
+                id: '3',
                 name: 'Seil springen',
                 score: '10000',
                 unitSymbol: 'x'

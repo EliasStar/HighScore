@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/style.css" type="text/css">
     <script src="/public/js/client.js" defer></script>
-    <script src="/public/js/path.js" defer></script>
-    <script src="/public/js/theme.js" defer></script>
-    <script src="/public/js/dropup.js" defer></script>
+    <script src="/public/js/index.js" defer></script>
+    <script src="/public/js/container.js" defer></script>
 </head>
 
 <body>
@@ -26,7 +25,9 @@
         </div>
         <div id="error-container">
             <div class="container">
-                <p id="path">Übersicht / Fehler</p>
+                <p id="path">
+                    <span id="overview" class="path-button clickable link hover">Übersicht</span> / Fehler
+                </p>
             </div>
             <div class="container">
                 <header>Fehler</header>
@@ -84,9 +85,9 @@
                 <img src="/public/img/more.svg" alt="More">
             </button>
             <nav id="dropup">
-                <div class="link hover clickable">Über</div>
+                <div id="about-button" class="link hover clickable">Über</div>
                 <div>Lang buttons lol</div>
-                <div class="link hover clickable">Hilfe</div>
+                <div id="help-button" class="link hover clickable">Hilfe</div>
             </nav>
         </span>
     </footer>
