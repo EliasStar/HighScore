@@ -4,11 +4,11 @@
     <title>HighScore</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script src="js/client.js" defer></script>
-    <script src="js/path.js" defer></script>
-    <script src="js/theme.js" defer></script>
-    <script src="js/dropup.js" defer></script>
+    <link rel="stylesheet" href="/public/css/style.css" type="text/css">
+    <script src="/public/js/client.js" defer></script>
+    <script src="/public/js/path.js" defer></script>
+    <script src="/public/js/theme.js" defer></script>
+    <script src="/public/js/dropup.js" defer></script>
 </head>
 
 <body>
@@ -42,7 +42,7 @@
     </main>
     <footer id="footer">
         <span id="logo" class="clickable hover">
-            <img src="img/logo.jpg" alt="Dachsberg Logo" />
+            <img src="/public/img/logo.jpg" alt="Dachsberg Logo" />
             <h1>HighScore</h1>
         </span>
 
@@ -73,15 +73,15 @@
         <span id="buttons">
             {{#if teacher}}
             <button id="add-button" class="btn clickable" type="button">
-                <img src="img/plus.svg" alt="Add">
+                <img src="/public/img/plus.svg" alt="Add">
             </button>
             {{/if}}
             <button id="theme-button" class="btn clickable" type="button">
-                <img id="icon-dark" src="img/dark.svg" alt="Switch Theme">
-                <img id="icon-light" src="img/light.svg" alt="Switch Theme">
+                <img id="icon-dark" src="/public/img/dark.svg" alt="Switch Theme">
+                <img id="icon-light" src="/public/img/light.svg" alt="Switch Theme">
             </button>
             <button id="dropup-button" class="btn clickable" type="button">
-                <img src="img/more.svg" alt="More">
+                <img src="/public/img/more.svg" alt="More">
             </button>
             <nav id="dropup">
                 <div class="link hover clickable">Über</div>

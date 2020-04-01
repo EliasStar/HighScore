@@ -1,3 +1,4 @@
+'use strict';
 let main;
 let currentContainer;
 let loadingContainer;
@@ -42,7 +43,6 @@ function getContainer(path, params) {
             initContainer();
         }
     }).catch(err => {
-        console.log(err.trace);
         errorContainerTitle.textContent = err.name;
         errorContainerDescription.textContent = err.message;
 

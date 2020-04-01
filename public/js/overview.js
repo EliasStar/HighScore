@@ -10,7 +10,7 @@ function onNextButtonPressed(evt) {
 
     //? URL or query params
     //* API Endpoint may change!
-    getContainer('/student/sport', {
+    getContainer('/private/', {
         sport: elem.id.substring(6)
     });
 }

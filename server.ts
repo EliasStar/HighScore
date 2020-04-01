@@ -1,18 +1,17 @@
-import fs from 'fs';
+import express, { ErrorRequestHandler } from 'express';
 import http from 'http';
 import https from 'https';
-import express, { ErrorRequestHandler } from 'express';
+import fs from 'fs';
 import { join } from 'path';
+import hbs from 'hbs';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import csurf from 'csurf';
-import hbs from 'hbs';
 
 import indexRouter from './routes/index';
-import studentRouter from './routes/student';
-import teacherRouter from './routes/teacher';
-import commonRouter from './routes/common';
+import privateRouter from './routes/private';
+import publicRouter from './routes/public';
 import staticRouter from './routes/static';
 
 // HTTP Redirect Server
@@ -31,17 +30,21 @@ http.createServer((req, res) => {
 
 //Main Server
 const httpsPort = process.env.HTTPS_PORT || '443';
+const debug = process.env.NODE_ENV === 'development' || true;
+const pathViews = join(__dirname, 'views');
+const pathStatic = join(__dirname, 'public');
+const pathKey = join(__dirname, 'key', 'server.key');
+const pathCert = join(__dirname, 'key', 'server.crt');
 const app = express();
 
 //Options
 app.set('port', httpsPort);
 app.set('view engine', 'hbs');
-app.set('views', join(__dirname, 'views'));
-hbs.registerPartials(join(__dirname, 'views'));
+app.set('views', pathViews);
+hbs.registerPartials(pathViews);
 
 
 //Middleware
-app.use(express.static(join(__dirname, 'public')));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET || 'secret'));
 app.use(helmet());
@@ -61,9 +64,8 @@ app.use(csurf({
 
 //Routes
 app.use('/', indexRouter);
-app.use('/student', studentRouter);
-app.use('/teacher', teacherRouter);
-app.use('/common', commonRouter);
+app.use('/private', privateRouter)
+app.use('/public', express.static(pathStatic), publicRouter);
 app.use('/static', staticRouter);
 
 //Error Handlers
@@ -76,18 +78,17 @@ app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
         return nxt(err);
     }
 
-    //! HELP! kp warum des nd funkt
-    //if (process.env.NODE_ENV !== 'production') {
-    console.error(err.stack);
-    res.status(500).send(err.stack);
-    //} else {
-    //   res.status(500).end();
-    //}
+    if (debug) {
+        console.error(err.stack);
+        res.status(500).send(err.stack);
+    } else {
+        res.status(500).end();
+    }
 }));
 
 https.createServer({
-    key: fs.readFileSync('key/server.key'),
-    cert: fs.readFileSync('key/server.crt')
+    key: fs.readFileSync(pathKey),
+    cert: fs.readFileSync(pathCert)
 }, app).listen(httpsPort, () => {
     console.log('Main server listening on ' + httpsPort);
 });
