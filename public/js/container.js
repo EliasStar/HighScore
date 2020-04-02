@@ -1,11 +1,7 @@
 window.addEventListener('load', initContainer);
 
 function initContainer() {
-    document.querySelectorAll('#path>.path-button').forEach(elem => {
-        elem.addEventListener("click", onButtonPressed);
-    });
-
-    currentContainer.querySelectorAll('.table .next-button').forEach(elem => {
+    document.querySelectorAll('.get-button').forEach(elem => {
         elem.addEventListener("click", onButtonPressed);
     });
 }

@@ -28,6 +28,18 @@ privateRouter.get('/overview', (req, res) => {
     });
 });
 
+privateRouter.get('/sport/:id', (req, res) => {
+    res.render('private/sport', {
+
+    });
+});
+
+privateRouter.get('/student/:id', (req, res) => {
+    res.render('private/sport', {
+
+    });
+});
+
 privateRouter.use((req, res) => {
     res.status(404).end();
 });
