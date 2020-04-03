@@ -197,11 +197,11 @@ main {
     border-color: var(--error-border-color);
 }
 
-.error-message .error-title {
+.error-message>.error-title {
     font-weight: bold;
 }
 
-.error-message .error-description {
+.error-message>.error-description {
     font-style: italic;
     white-space: pre;
 }
