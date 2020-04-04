@@ -20,8 +20,9 @@
   "private": true,
   "main": "server",
   "scripts": {
-    "run:dev": "set NODE_ENV=development && nodemon",
-    "run:prod": "set NODE_ENV=production && node server.js"
+    "run": "",
+    "start": "",
+    "test": ""
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",

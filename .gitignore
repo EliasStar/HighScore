@@ -33,3 +33,4 @@ node_modules/
 
 public/img/icons/
 package-lock.json
+db/
