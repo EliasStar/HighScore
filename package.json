@@ -20,9 +20,7 @@
   "private": true,
   "main": "server",
   "scripts": {
-    "run": "",
-    "start": "",
-    "test": ""
+    "start": "docker-compose up"
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",
@@ -32,16 +30,15 @@
     "@types/hbs": "^4.0.1",
     "@types/helmet": "^0.0.45",
     "@types/node": "^13.7.1",
-    "nodemon": "^2.0.2",
+    "typescript": "^3.8.3",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
+    "nodemon": "^2.0.2"
   },
   "dependencies": {
     "express": "^4.17.1",
     "hbs": "^4.1.0",
     "tslib": "^1.11.0",
     "helmet": "^3.21.2",
-    "passport": "^0.4.1",
     "cookie-parser": "^1.4.4",
     "compression": "^1.7.4",
     "csurf": "^1.11.0"
