@@ -5,6 +5,7 @@ services:
     image: "node:13.12-stretch"
     environment:
       NODE_ENV: "development"
+      SCRIPT_PATH: "/src/node_modules/.bin/"
     ports:
       - "8080:80"
       - "443:443"
