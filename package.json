@@ -20,7 +20,8 @@
   "private": true,
   "main": "server",
   "scripts": {
-    "start": "docker-compose up"
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down"
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",
