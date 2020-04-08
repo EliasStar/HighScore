@@ -27,10 +27,4 @@ node_modules/
 # Output of 'npm pack'
 *.tgz
 
-# dotenv environment variables file
-.env
-.env.test
-
 public/img/icons/
-package-lock.json
-db/

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import csurf from 'csurf';
+import mongo from 'mongoose';
 
 import indexRouter from './routes/index';
 import privateRouter from './routes/private';
@@ -30,7 +31,7 @@ http.createServer((req, res) => {
 
 //Main Server
 const httpsPort = process.env.HTTPS_PORT || '443';
-const debug = process.env.NODE_ENV === 'development' || true;
+const debug = process.env.NODE_ENV === 'development';
 const pathViews = join(__dirname, 'views');
 const pathStatic = join(__dirname, 'public');
 const pathKey = join(__dirname, 'key', 'server.key');
@@ -86,9 +87,26 @@ app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
     }
 }));
 
+mongo.connect('mongodb://db:27017/', {
+    dbName: 'highscore',
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+}, err => {
+    //! Error handling
+    console.log(err);
+});
+
+mongo.connection.once('load', () => {
+    //! Logging
+    console.log('Connected to database.');
+});
+
 https.createServer({
+    //! Make Better
     key: fs.readFileSync(pathKey),
     cert: fs.readFileSync(pathCert)
 }, app).listen(httpsPort, () => {
+    //! Logging
     console.log('Main server listening on ' + httpsPort);
-});
+})
