@@ -15,7 +15,8 @@
   },
   "include": [
     "./*",
-    "./routes/*"
+    "./routes/*",
+    "./typings/*.d.ts"
   ],
   "exclude": []
 }

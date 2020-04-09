@@ -4,8 +4,13 @@ services:
   highscore:
     image: "node:13.12-stretch"
     environment:
-      NODE_ENV: "development"
       SCRIPT_PATH: "/src/node_modules/.bin/"
+      NODE_ENV: "development"
+      DATABASE_URI: "mongodb://db:27017/"
+      DATABASE_NAME: "highscore"
+      COOKIE_SECRET: "highscore_cookie_secret"
+      KEY_PATH: "./key/server.key"
+      CERTIFICATE_PATH: "./key/server.crt"
     ports:
       - "8080:80"
       - "443:443"
