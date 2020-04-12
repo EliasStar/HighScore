@@ -4,9 +4,10 @@ const router = express.Router();
 router.get('/', (req, res, nxt) => {
 
     if (!req.authenticated) {
-        res.render('index', {
+        res.status(401).render('index', {
             currentContainer: 'public/login',
-            teacher: false
+            teacher: false,
+            classes: []
         });
         return;
     }

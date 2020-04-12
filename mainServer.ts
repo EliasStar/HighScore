@@ -9,13 +9,15 @@ import helmet from 'helmet';
 import compression from 'compression';
 import csurf from 'csurf';
 import mongo from 'mongoose';
+import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 
 import redirectHTTP from './redirectServer'
+import { updateStudentList, closeClient } from './models/student'
+import _ from './models/score'
 
 import indexRouter from './routes/index';
 import privateRouter from './routes/private';
 import publicRouter from './routes/public';
-import { resolve } from 'dns';
 
 
 //Environment variables
@@ -32,15 +34,19 @@ if (httpPort !== NaN && httpsPort !== NaN && dbURI !== undefined && dbName !== u
     keyPath = join(__dirname, keyPath);
     certPath = join(__dirname, certPath);
 } else {
-    //! Error handling
-    console.error('Environment variables not correctly set!');
-    process.exit(1);
+    console.error('[HighScore] Environment variables are not correctly set!');
+    process.exit(32);
 }
 
 //Constants
 const viewsPath = join(__dirname, 'views');
 const staticPath = join(__dirname, 'public');
 const app = express();
+
+//Variables
+let mainServerTerminator: HttpTerminator;
+let redirectServerTerminator: HttpTerminator;
+
 
 //Options
 app.set('port', httpsPort);
@@ -49,6 +55,7 @@ app.set('views', viewsPath);
 hbs.registerPartials(viewsPath);
 
 //Middleware
+app.use('/public', express.static(staticPath));
 app.use(express.json());
 app.use(cookieParser(cookieSecret));
 app.use(helmet());
@@ -69,6 +76,14 @@ app.use((req, res, nxt) => {
     //! Mock Auth
     req.authenticated = req.query.auth === "teacher" || req.query.auth === "student";
     req.teacher = req.query.auth === "teacher";
+
+    let end = res.end;
+    res.end = function () {
+        let authenticated = req.authenticated ? 'authenticated as ' + (req.teacher ? 'teacher' : 'student') : 'not authenticated';
+        console.log(`[MainServer] ${req.method} ${req.path} ${res.statusCode} | ${authenticated}`);
+        end.apply(res, [arguments[0], arguments[1], arguments[2]]);
+    }
+
     nxt();
 });
 
@@ -78,11 +93,11 @@ app.use((req, res, nxt) => {
     if (req.authenticated) {
         nxt();
     } else {
-        res.render("public/login");
+        res.status(401).render("public/login");
     }
 });
 app.use('/private', privateRouter)
-app.use('/public', express.static(staticPath), publicRouter);
+app.use('/public', publicRouter);
 
 //Error Handlers
 app.use((req, res, nxt) => {
@@ -102,22 +117,10 @@ app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
     }
 }));
 
-mongo.connection.on('connected', () => {
-    //! Logging
-    console.log('Connected.');
-});
-mongo.connection.on('disconnected', () => {
-    //! Logging
-    console.log('Disconnected.');
-});
-mongo.connection.on('reconnected', () => {
-    //! Logging
-    console.log('Reconnected.');
-});
-mongo.connection.on('error', err => {
-    //! Logging
-    console.error('Database error:' + err);
-});
+mongo.connection.once('connected', () => console.log('[Database] Connected to MongoDB.'))
+    .on('disconnected', () => console.log('[Database] Disconnected from MongoDB.'))
+    .on('reconnected', () => console.log('[Database] Reconnected to MongoDB.'))
+    .on('error', err => console.error('[Database] Encountered error:' + err));
 
 Promise.all([
     promisify(readFile)(keyPath),
@@ -127,17 +130,49 @@ Promise.all([
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true
-    })
+    }),
+    updateStudentList()
 ]).then((values) => {
-    https.createServer({
-        key: values[0],
-        cert: values[1]
-    }, app).listen(httpsPort, () => {
-        //! Logging
-        console.log('Main server listening on ' + httpsPort);
-        redirectHTTP(httpPort, httpsPort);
-    })
+    mainServerTerminator = createHttpTerminator({
+        server:
+            https.createServer({
+                key: values[0],
+                cert: values[1]
+            }, app).listen(httpsPort, () => {
+                console.log('[MainServer] Listening on ' + httpsPort);
+                redirectServerTerminator = createHttpTerminator({
+                    server: redirectHTTP(httpPort, httpsPort)
+                });
+            })
+    });
 }).catch((err) => {
-    console.error(err);
-    process.exit(1);
+    console.error('[HighScore] Encountered error while initializing: ' + err);
+    process.exit(33);
 });
+
+async function onExitSignalReceived() {
+    try {
+        console.log('[HighScore] Terminating servers...');
+        await Promise.all([
+            mainServerTerminator.terminate(),
+            redirectServerTerminator.terminate()
+        ]);
+
+        console.log('[HighScore] Closing database connections...');
+        await Promise.all([
+            mongo.disconnect(),
+            closeClient()
+        ])
+    } catch (err) {
+        console.error('[HighScore] Error during shutdown: ' + err);
+        process.exit(34);
+    }
+
+    console.log('[HighScore] Done!');
+    process.exit(0);
+}
+
+process.once('SIGINT', onExitSignalReceived)
+    .once('SIGTERM', onExitSignalReceived)
+    .once('SIGHUP', onExitSignalReceived)
+    .once('SIGBREAK', onExitSignalReceived);

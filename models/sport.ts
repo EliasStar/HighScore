@@ -1,6 +1,10 @@
 import mongo from 'mongoose';
 
 const sport = new mongo.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -15,6 +19,6 @@ const sport = new mongo.Schema({
     }
 });
 
-mongo.model('sports', sport);
+mongo.model('sport', sport);
 
 export default sport;

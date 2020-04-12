@@ -8,6 +8,12 @@ const score = new mongo.Schema({
     score: {
         type: Number,
         required: true
+    },
+    teacher: {
+        type: String
+    },
+    createdAt: {
+        type: Date
     }
 });
 

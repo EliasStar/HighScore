@@ -33,6 +33,7 @@
     "@types/helmet": "^0.0.45",
     "@types/mongoose": "^5.7.8",
     "@types/node": "^13.7.1",
+    "@types/node-fetch": "^2.5.5",
     "nodemon": "^2.0.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
@@ -44,6 +45,7 @@
     "express": "^4.17.1",
     "hbs": "^4.1.0",
     "helmet": "^3.21.2",
+    "http-terminator": "^2.0.2",
     "mongoose": "^5.9.7",
     "tslib": "^1.11.0"
   }
