@@ -6,7 +6,7 @@ let classes: { [id: string]: ClassName };
 
 type ClassName = string;
 
-export type Student = {
+export interface Student {
     id: string,
     name: {
         first: string
@@ -14,14 +14,6 @@ export type Student = {
     },
     class: ClassName,
     gender: 'male' | 'female'
-}
-
-interface InternalStudent {
-    studentId: string,
-    firstName: string,
-    lastName: string,
-    cls: string,
-    gender: 'M' | 'W'
 }
 
 client.on('error', err => console.error('[Database] Error from client: ' + err));
@@ -40,7 +32,13 @@ export function updateStudentList() {
         if (typeof status === 'number') {
             switch (status) {
                 case 200:
-                    let students: InternalStudent[] = JSON.parse(data);
+                    let students: {
+                        studentId: string,
+                        firstName: string,
+                        lastName: string,
+                        cls: string,
+                        gender: 'M' | 'W'
+                    }[] = JSON.parse(data);
                     studentList = students.map(student => {
                         return {
                             id: student.studentId,
