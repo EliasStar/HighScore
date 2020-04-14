@@ -55,7 +55,6 @@ app.set('views', viewsPath);
 hbs.registerPartials(viewsPath);
 
 //Middleware
-app.use('/public', express.static(staticPath));
 app.use(express.json());
 app.use(cookieParser(cookieSecret));
 app.use(helmet());
@@ -89,15 +88,8 @@ app.use((req, res, nxt) => {
 
 //Routes
 app.use('/', indexRouter);
-app.use((req, res, nxt) => {
-    if (req.authenticated) {
-        nxt();
-    } else {
-        res.status(401).render("public/login");
-    }
-});
-app.use('/private', privateRouter)
-app.use('/public', publicRouter);
+app.use('/private', privateRouter);
+app.use('/public', express.static(staticPath), publicRouter);
 
 //Error Handlers
 app.use((req, res, nxt) => {

@@ -1,6 +1,14 @@
 import express from 'express';
 const privateRouter = express.Router();
 
+privateRouter.use((req, res, nxt) => {
+    if (req.authenticated) {
+        nxt();
+    } else {
+        res.status(401).render("public/login");
+    }
+});
+
 privateRouter.get('/overview', (req, res) => {
     res.render('private/overview', {
         sports: [

@@ -3,22 +3,33 @@ import mongo from 'mongoose';
 const sport = new mongo.Schema({
     _id: {
         type: String,
+        alias: 'id',
+        lowercase: true,
+        unique: true,
         required: true
     },
     name: {
         type: String,
+        trim: true,
         required: true
     },
     unitName: {
         type: String,
+        //enum: ['Zeit', 'Punkte', 'Strecke'],
+        trim: true,
         required: true
     },
     unit: {
         type: String,
+        //enum: ['s', 'min', 'h', 'x', 'Mal', 'km', 'm', 'cm']
+        trim: true,
         required: true
     }
 });
 
-mongo.model('sport', sport);
+sport.pre('validate', function (nxt) {
+    this._id = (<string>this.get('name')).replace(/[^a-zA-Z0-9\.\-]+/g, '');
+    nxt();
+});
 
-export default sport;
+export default mongo.model('Sport', sport);
