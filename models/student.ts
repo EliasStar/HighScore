@@ -1,12 +1,20 @@
+import http2 from 'http2';
+
+const client = http2.connect('https://www.dachsberg.at:443', () => console.log('[Database] Connected to Dachsberg.'));
+let studentList: Student[];
 let classes: string[];
 
-interface StudentListEntry {
-    studentId: string,
-    firstName: string,
-    lastName: string,
-    cls: string,
-    gender: 'M' | 'W'
+export interface Student {
+    id: number,
+    name: {
+        first: string
+        last: string
+    },
+    class: string,
+    gender: 'male' | 'female'
 }
+
+client.on('error', err => console.error('[Database] Error from client: ' + err));
 
 export function updateStudentList() {
     const body = 'request=studentList';
@@ -22,23 +30,33 @@ export function updateStudentList() {
         if (typeof status === 'number') {
             switch (status) {
                 case 200:
-                    let students: [] = JSON.parse(data);
+                    let students: {
+                        studentId: string,
+                        firstName: string,
+                        lastName: string,
+                        cls: string,
+                        gender: 'M' | 'W'
+                    }[] = JSON.parse(data);
+
                     studentList = students.map(student => {
-                        let cls = student.cls.toUpperCase();
-                        if (classes.indexOf(cls) === -1) {
-                            classes.push(cls);
+                        let className = student.cls.toUpperCase();
+
+                        if (!classes.includes(className)) {
+                            classes.push(className);
                         }
+
                         return {
-                            id: student.studentId,
+                            id: parseInt(student.studentId, 10),
                             name: {
                                 first: student.firstName,
                                 last: student.lastName
                             },
-                            class: cls,
+                            class: className,
                             gender: student.gender === 'M' ? 'male' : 'female'
                         }
                     });
-                    //Sort
+
+                    classes.sort();
                     console.log('[Database] Updated student list.');
                     break;
 
@@ -55,58 +73,39 @@ export function updateStudentList() {
     }).on('error', err => console.error('[Database] Error while updating student list: ' + err)).end(body);
 }
 
-export function closeClient() {
-    client.close();
+export function nameForID(id: number): string {
+    studentList.forEach(student => {
+        if (student.id === id) {
+            return `${student.name.last} ${student.name.first}`;
+        }
+    });
+    return '';
 }
 
-export default class Student {
-    studentList: Student[];
-    readonly _id: number;
-    readonly id: number;
-    readonly name: string;
-    readonly class: string;
-    readonly gender: 'male' | 'female';
+export function find(gender: 'male' | 'female' | 'both', className: 'all' | string): Student[] {
+    let result: Student[] = [];
+    studentList.forEach(student => {
+        if ((className === 'all' || student.class === className) && (gender === 'both' || student.gender === gender)) {
+            result.push(student);
+        }
+    });
+    return result;
+}
 
-    private constructor(student: StudentListEntry) {
-        this.id = this._id = parseInt(student.studentId, 10);
-        this.name = `${student.lastName} ${student.firstName}`;
-        this.class = student.cls.toUpperCase();
-        this.gender = student.gender === 'M' ? 'male' : 'female'
-    }
+export function findById(id: number): Student | undefined {
+    studentList.forEach(student => {
+        if (student.id === id) {
+            return student;
+        }
+    });
+    return undefined;
+}
 
-    static find(filter: Object): Student[] {
 
+export function getClasses(): string[] {
+    return classes;
+}
 
-        let result: Student[] = [];
-        studentList.forEach(student => {
-            if ((className === 'all' || student.class === className) && (gender === 'both' || student.gender === gender)) {
-                result.push(student);
-            }
-        });
-        return result;
-    }
-
-    static findById(id: number): Student | undefined {
-        studentList.forEach(student => {
-            if (student.id === id) {
-                return student;
-            }
-        });
-
-        return undefined;
-    }
-
-    static nameForId(id: number): string {
-        studentList.forEach(student => {
-            if (student.id === id) {
-                return student.name;
-            }
-        });
-
-        return '';
-    }
-
-    static getClasses(): string[] {
-        return classes;
-    }
+export function closeClient() {
+    client.close();
 }
