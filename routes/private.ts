@@ -5,7 +5,7 @@ privateRouter.use((req, res, nxt) => {
     if (req.authenticated) {
         nxt();
     } else {
-        res.status(401).render("public/login");
+        res.status(401).render("public/auth/unauthorized");
     }
 });
 
@@ -36,13 +36,21 @@ privateRouter.get('/overview', (req, res) => {
     });
 });
 
-privateRouter.get('/sport/:id', (req, res) => {
-    res.render('private/sport', {
-
-    });
+privateRouter.get('/new/sport', (req, res) => {
+    if (req.teacher) {
+        res.render('private/new/sport', { csrfToken: req.csrfToken() });
+    } else {
+        res.status(403).render('public/auth/forbidden');
+    }
 });
 
-privateRouter.get('/student/:id', (req, res) => {
+privateRouter.post('/new/sport', (req, res) => {
+    //res.redirect(`private/sport/${sport.id}`);
+    //res.redirect(`private/overview`);
+    //res.redirect(`private/new/sport`);
+});
+
+privateRouter.get('/sport/:id', (req, res) => {
     res.render('private/sport', {
 
     });

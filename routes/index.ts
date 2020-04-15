@@ -5,7 +5,7 @@ router.get('/', (req, res, nxt) => {
 
     if (!req.authenticated) {
         res.status(401).render('index', {
-            currentContainer: 'public/login',
+            currentContainer: 'public/auth/unauthorized',
             teacher: false,
             classes: []
         });
