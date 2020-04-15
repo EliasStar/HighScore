@@ -15,15 +15,14 @@ const sport = new mongo.Schema({
     },
     unitName: {
         type: String,
-        //enum: ['Zeit', 'Punkte', 'Strecke'],
+        //enum: ['Zeit', 'Punkte', 'Strecke', 'Anzahl', 'Kraft'],
         trim: true,
         required: true
     },
     unit: {
         type: String,
-        //enum: ['s', 'min', 'h', 'x', 'Mal', 'km', 'm', 'cm']
-        trim: true,
-        required: true
+        //enum: ['s', 'min', 'h', 'x', 'km', 'm', 'cm', 'N']
+        trim: true
     }
 });
 

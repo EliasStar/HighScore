@@ -1,6 +1,6 @@
 import mongo from 'mongoose';
 
-const score = new mongo.Schema({
+export default new mongo.Schema({
     student: {
         type: String,
         required: true
@@ -16,5 +16,3 @@ const score = new mongo.Schema({
         type: Date
     }
 });
-
-export default score;

@@ -1,4 +1,9 @@
 import express from 'express';
+import mongo from 'mongoose';
+
+import Sport from '../models/sport';
+import ScoreSchema from '../models/score';
+
 const privateRouter = express.Router();
 
 privateRouter.use((req, res, nxt) => {
@@ -44,10 +49,31 @@ privateRouter.get('/new/sport', (req, res) => {
     }
 });
 
-privateRouter.post('/new/sport', (req, res) => {
-    //res.redirect(`private/sport/${sport.id}`);
-    //res.redirect(`private/overview`);
-    //res.redirect(`private/new/sport`);
+privateRouter.post('/new/sport', async (req, res) => {
+    if (req.teacher) {
+        try {
+            const sport = new Sport({
+                name: req.body.name,
+                unitName: req.body.unitName,
+                unit: req.body.unit
+            })
+
+            await sport.save();
+
+            mongo.model(sport.id, ScoreSchema, sport.id);
+
+            //res.redirect(`private/sport/${sport.id}`, 300);
+            res.redirect(`private/overview`, 303);
+        } catch (err) {
+            if (err instanceof mongo.Error.ValidationError) {
+                res.status(400).end();
+            } else {
+                res.status(500).end('Error while saving sport. Try again!');
+            }
+        }
+    } else {
+        res.status(403).render('public/auth/forbidden');
+    }
 });
 
 privateRouter.get('/sport/:id', (req, res) => {
