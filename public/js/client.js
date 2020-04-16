@@ -3,49 +3,109 @@ let currentContainer;
 let loadingContainer;
 let errorContainer;
 
-let errorContainerTitle;
-let errorContainerDescription;
+let params = '';
+let busy = false;
 
 window.addEventListener('load', () => {
     main = document.querySelector('main');
     currentContainer = document.getElementById('current-container');
     loadingContainer = document.getElementById('loading-container');
     errorContainer = document.getElementById('error-container');
-
-    errorContainerTitle = errorContainer.querySelector('.error-title');
-    errorContainerDescription = errorContainer.querySelector('.error-description');
 });
 
-function getContainer(path, params) {
-    currentContainer.remove();
-    errorContainer.style.display = 'none';
-    loadingContainer.style.display = 'block';
+function setParams(parameter) {
+    params = Object.keys(parameter).map(key => key + '=' + parameter[key]).join('&');
+}
 
-    fetch(typeof params !== 'undefined' ? path + "?" + Object.keys(params).map(key => key + '=' + params[key]).join('&') : path, {
+function refreshContainer() {
+    let path = currentContainer.getAttribute('data-location')
+    if (path !== '') {
+        getContainer(path);
+    }
+}
+
+function getContainer(path) {
+    callFetch(path, {
+        method: 'GET',
         mode: 'same-origin',
         redirect: 'error',
         referrer: 'no-referrer'
-    }).then(async response => {
+    }, errorContainer);
+}
+
+function postData(path, body) {
+    bodyString = JSON.stringify(body);
+
+    callFetch(path, {
+        method: 'POST',
+        mode: 'same-origin',
+        redirect: 'follow',
+        referrer: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': (new TextEncoder().encode(bodyString)).length
+        },
+        body: bodyString
+    }, currentContainer);
+}
+
+//NOT IMPLEMENTED
+function deleteData(path, body) {
+    bodyString = JSON.stringify(body);
+
+    callFetch(path, {
+        method: 'DELETE',
+        mode: 'same-origin',
+        redirect: 'follow',
+        referrer: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(bodyString)
+        },
+        body: bodyString
+    }, currentContainer);
+}
+
+async function callFetch(path, init, errorContainerElem) {
+    if (busy) {
+        return;
+    }
+
+    busy = true;
+
+    currentContainer.style.display = 'none';
+    errorContainerElem.style.display = 'none';
+    loadingContainer.style.display = 'block';
+
+    errorTitleElem = errorContainerElem.querySelector('.error-title');
+    errorDescriptionElem = errorContainerElem.querySelector('.error-description');
+
+    try {
+        response = await fetch(path + "?" + params, init);
+
         if (!response.ok) {
             let err = new Error(response.status + " " + response.statusText);
             err.trace = await response.text();
             throw err;
         } else {
             let container = new DOMParser().parseFromString(await response.text(), "text/html").getElementById('current-container');
+            currentContainer.remove();
             loadingContainer.style.display = 'none';
             currentContainer = main.appendChild(container);
             initContainer();
         }
-    }).catch(err => {
-        errorContainerTitle.textContent = err.name;
-        errorContainerDescription.textContent = err.message;
-
-        if (typeof err.trace !== 'undefined' && err.trace !== '') {
-            errorContainerDescription.textContent += "\n\n" + err.trace;
+    } catch (err) {
+        if (typeof err.trace === 'undefined' || err.trace === '') {
+            errorTitleElem.textContent = err.name;
+            errorDescriptionElem.textContent = err.message;
+        } else {
+            errorTitleElem.textContent = err.message;
+            errorDescriptionElem.textContent = err.trace;
         }
 
         loadingContainer.style.display = 'none';
-        errorContainer.style.display = 'block';
-        return;
-    });
+        errorContainerElem.style.display = 'block';
+    }
+
+    busy = false;
 }

@@ -18,7 +18,7 @@
     --container-gap: 25px;
 }
 
-:root[theme="light"] {
+:root[data-theme="light"] {
     --foreground-color: white;
     --background-color: #f5f8fa;
 
@@ -51,7 +51,7 @@
     --icon-dark-display: inline;
 }
 
-:root[theme="dark"] {}
+:root[data-theme="dark"] {}
 
 * {
     margin: 0;

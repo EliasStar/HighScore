@@ -73,13 +73,18 @@ app.use(csurf({
 }));
 app.use((req, res, nxt) => {
     //! Mock Auth
-    req.authenticated = req.query.auth === "teacher" || req.query.auth === "student";
-    req.teacher = req.query.auth === "teacher";
+    req.authenticated = true;
+    req.teacher = true;
 
     let end = res.end;
     res.end = function () {
         let authenticated = req.authenticated ? 'authenticated as ' + (req.teacher ? 'teacher' : 'student') : 'not authenticated';
-        console.log(`[MainServer] ${req.method} ${req.path} ${res.statusCode} | ${authenticated}`);
+
+        let queryString = Object.keys(req.query).map(key => key + '=' + req.query[key]).join('&');
+        queryString = queryString !== '' ? '?' + queryString : '';
+
+        console.log(`[MainServer] ${req.method}\t${req.path}${queryString}\t${res.statusCode} | ${authenticated}`);
+
         end.apply(res, [arguments[0], arguments[1], arguments[2]]);
     }
 
@@ -123,7 +128,7 @@ Promise.all([
         useUnifiedTopology: true,
         useCreateIndex: true
     }),
-    updateStudentList()
+    //updateStudentList()
 ]).then((values) => {
     mainServerTerminator = createHttpTerminator({
         server:

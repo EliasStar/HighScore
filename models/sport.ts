@@ -5,7 +5,6 @@ const sport = new mongo.Schema({
         type: String,
         alias: 'id',
         lowercase: true,
-        unique: true,
         required: true
     },
     name: {

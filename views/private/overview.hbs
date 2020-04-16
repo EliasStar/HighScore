@@ -1,4 +1,4 @@
-<div id="current-container">
+<div id="current-container" data-location="/private/overview">
     <div class="container">
         <p id="path">Übersicht</p>
     </div>
@@ -24,8 +24,8 @@
                             {{/if}}
                         </td>
                         <td>
-                            <span id="sport-{{id}}"
-                                class="next-button clickable btn-icon icon icon-circle-arrow-right"></span>
+                            <span class="get-button clickable btn-icon icon icon-circle-arrow-right"
+                                data-location="/private/sport/{{id}}"></span>
                         </td>
                     </tr>
                     {{/each}}

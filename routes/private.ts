@@ -63,12 +63,12 @@ privateRouter.post('/new/sport', async (req, res) => {
             mongo.model(sport.id, ScoreSchema, sport.id);
 
             //res.redirect(`private/sport/${sport.id}`, 300);
-            res.redirect(`private/overview`, 303);
+            res.redirect(303, `/private/overview?class=${req.query.class || 'ALL'}&gender=${req.query.gender || 'A'}`);
         } catch (err) {
             if (err instanceof mongo.Error.ValidationError) {
-                res.status(400).end();
+                res.status(400).send(err);
             } else {
-                res.status(500).end('Error while saving sport. Try again!');
+                res.status(500).send('Error while saving sport. Try again!');
             }
         }
     } else {

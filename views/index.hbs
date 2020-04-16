@@ -1,14 +1,17 @@
-<html lang="" theme="light">
+<html lang="" data-theme="light">
 
 <head>
     <title>HighScore</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="/public/img/favicon.ico">
-    <link rel="stylesheet" href="/public/css/style.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
     <script src="/public/js/client.js" defer></script>
     <script src="/public/js/index.js" defer></script>
     <script src="/public/js/container.js" defer></script>
+    {{#if teacher}}
+    <script src="/public/js/teacher.js" defer></script>
+    {{/if}}
 </head>
 
 <body>
@@ -27,7 +30,7 @@
         <div id="error-container">
             <div class="container">
                 <p id="path">
-                    <span id="overview" class="path-button clickable link hover">Übersicht</span> / Fehler
+                    <span id="path-error" class="clickable link hover">Übersicht</span> / Fehler
                 </p>
             </div>
             <div class="container">
@@ -62,10 +65,12 @@
                 <span class="right">
                     <label for="class">Klasse:</label>
                     <select id="class">
-                        <option value="All" selected>Alle</option>
+                        <option value="ALL" selected>Alle</option>
+                        {{#if classes}}
                         {{#each classes}}
                         <option value="{{this}}">{{this}}</option>
                         {{/each}}
+                        {{/if}}
                     </select>
                 </span>
                 {{/if}}

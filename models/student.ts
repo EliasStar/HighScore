@@ -27,6 +27,7 @@ export function updateStudentList() {
         'content-type': 'application/x-www-form-urlencoded',
         'content-length': Buffer.byteLength(body)
     }).setEncoding('utf8').on('response', headers => status = headers[":status"]).on('data', chunk => data += chunk).on('end', () => {
+        console.log(status);
         if (typeof status === 'number') {
             switch (status) {
                 case 200:

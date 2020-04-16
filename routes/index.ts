@@ -2,17 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res, nxt) => {
-
-    if (!req.authenticated) {
-        res.status(401).render('index', {
-            currentContainer: 'public/auth/unauthorized',
-            teacher: false,
-            classes: []
-        });
-        return;
-    }
-
-    let sports = [
+    const sports = [
         {
             id: '1',
             name: '100m Sprint',
@@ -35,18 +25,30 @@ router.get('/', (req, res, nxt) => {
         }
     ];
 
-    let classes: string[] = [];
-    if (req.teacher) {
-        //Get classes
-        classes = ["7N", "8N", "5N1", "5N3"];
+    if (!req.authenticated) {
+        res.status(401).render('index', {
+            currentContainer: 'public/auth/unauthorized',
+            teacher: false
+        });
+        return;
     }
 
-    res.render('index', {
-        currentContainer: 'private/overview',
-        sports: sports,
-        teacher: req.teacher,
-        classes: classes
-    });
+    if (req.teacher) {
+        let classes: string[] = ["7N", "8N", "5N1", "5N3"];
+
+        res.render('index', {
+            currentContainer: 'private/overview',
+            sports: sports,
+            teacher: true,
+            classes: classes
+        });
+    } else {
+        res.render('index', {
+            currentContainer: 'private/overview',
+            sports: sports,
+            teacher: false
+        });
+    }
 });
 
 export default router;

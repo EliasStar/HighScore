@@ -1,6 +1,7 @@
-<div>
+<div id="current-container">
     <div class="container">
-        <p id="path">Übersicht / Neuer Sport</p>
+        <p id="path"><span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> /
+            Neuer Sport</p>
     </div>
     <div class="container">
         <header>Sport hinzufügen</header>
@@ -9,14 +10,16 @@
                 <p class="error-title"></p>
                 <p class="error-description"></p>
             </div>
-
-            <meta name="csrfToken" content="{{csrfToken}}">
-            <label for="name">Name:</label>
-            <input type="text" name="name" placeholder="60m Sprint">
-            <label for="unitName">Einheit</label>
-            <input type="text" name="unitName" placeholder="Zeit">
-            <label for=" unit">Maßeinheit (Abkürzung)</label>
-            <input type="text" name="unit" placeholder="s">
+            <div id="new-sport" data-csrf-token="{{csrfToken}}">
+                <label for="name">Name:</label>
+                <input type="text" name="name" placeholder="60m Sprint" required>
+                <label for="unitName">Einheit</label>
+                <input type="text" name="unitName" placeholder="Zeit" required>
+                <label for="unit">Maßeinheit (Abkürzung)</label>
+                <input type="text" name="unit" placeholder="s">
+            </div>
+            <button class="post-button" data-location="/private/new/sport" data-formular="new-sport">Speichern</button>
+            <button class="get-button" data-location="/private/overview">Abbrechen</button>
         </div>
     </div>
 </div>
