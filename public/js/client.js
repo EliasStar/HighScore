@@ -77,8 +77,10 @@ async function callFetch(path, init, errorContainerElem) {
     errorContainerElem.style.display = 'none';
     loadingContainer.style.display = 'block';
 
-    errorTitleElem = errorContainerElem.querySelector('.error-title');
-    errorDescriptionElem = errorContainerElem.querySelector('.error-description');
+    errorMessageElem = errorContainer.querySelector('.error-message');
+
+    errorTitleElem = errorMessageElem.querySelector('.error-title');
+    errorDescriptionElem = errorMessageElem.querySelector('.error-description');
 
     try {
         response = await fetch(path + "?" + params, init);
@@ -102,6 +104,8 @@ async function callFetch(path, init, errorContainerElem) {
             errorTitleElem.textContent = err.message;
             errorDescriptionElem.textContent = err.trace;
         }
+
+        errorMessageElem.style.display = 'block';
 
         loadingContainer.style.display = 'none';
         errorContainerElem.style.display = 'block';
