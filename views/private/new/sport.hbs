@@ -12,14 +12,15 @@
             </div>
             <div id="new-sport" data-csrf-token="{{csrfToken}}">
                 <label for="name">Name:</label>
-                <input type="text" name="name" placeholder="60m Sprint" required>
-                <label for="unitName">Einheit</label>
-                <input type="text" name="unitName" placeholder="Zeit" required>
-                <label for="unit">Maßeinheit (Abkürzung)</label>
-                <input type="text" name="unit" placeholder="s">
+                <input class="ui input" type="text" name="name" placeholder="60m Sprint" required>
+                <label for="unitName">Einheit:</label>
+                <input class="ui input" type="text" name="unitName" placeholder="Zeit" required>
+                <label for="unit">Maßeinheit (Abkürzung):</label>
+                <input class="ui input" type="text" name="unit" placeholder="s">
             </div>
-            <button class="post-button" data-location="/private/new/sport" data-formular="new-sport">Speichern</button>
-            <button class="get-button" data-location="/private/overview">Abbrechen</button>
+            <button class="post-button ui btn btn-accent clickable" data-location="/private/new/sport"
+                data-formular="new-sport">Speichern</button>
+            <button class="get-button ui btn btn-normal clickable" data-location="/private/overview">Abbrechen</button>
         </div>
     </div>
 </div>
