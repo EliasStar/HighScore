@@ -2,42 +2,23 @@ import express from 'express';
 import mongo from 'mongoose';
 
 import Sport from '../models/sport';
-import ScoreSchema from '../models/score';
+import scoreSchema from '../models/score';
 
 const privateRouter = express.Router();
 
 privateRouter.use((req, res, nxt) => {
-    if (req.authenticated) {
-        nxt();
-    } else {
+    if (!req.authenticated) {
         res.status(401).render("public/auth/unauthorized");
+    } else {
+        nxt();
     }
 });
 
-privateRouter.get('/overview', (req, res) => {
+privateRouter.get('/overview', async (req, res) => {
+    const sports = await Sport.find().exec();
+
     res.render('private/overview', {
-        sports: [
-            {
-                id: '1',
-                name: '100m Sprint',
-                score: '5.5',
-                unitSymbol: 's',
-                student: 'Ich'
-            },
-            {
-                id: '2',
-                name: '400m Sprint',
-                score: '9.34',
-                unitSymbol: 's',
-                student: 'Du'
-            },
-            {
-                id: '3',
-                name: 'Seil springen',
-                score: '10000',
-                unitSymbol: 'x'
-            }
-        ]
+        sports: sports
     });
 });
 
@@ -54,21 +35,32 @@ privateRouter.post('/new/sport', async (req, res) => {
         try {
             const sport = new Sport({
                 name: req.body.name,
-                unitName: req.body.unitName,
-                unit: req.body.unit
+                unit: req.body.unit,
+                unitSymbol: req.body.unitSymbol
             })
 
             await sport.save();
 
-            mongo.model(sport.id, ScoreSchema, sport.id);
+            mongo.model(sport.id, scoreSchema, sport.id);
 
-            //res.redirect(`private/sport/${sport.id}`, 300);
-            res.redirect(303, `/private/overview?class=${req.query.class || 'ALL'}&gender=${req.query.gender || 'A'}`);
+            //res.redirect(`private/sport/${sport.id}?gender=${req.query.gender}&class=${req.query.class}`, 300);
+            res.redirect(303, `/private/overview?gender=${req.query.gender}&class=${req.query.class}`);
         } catch (err) {
-            if (err instanceof mongo.Error.ValidationError) {
-                res.status(400).send(err);
-            } else {
-                res.status(500).send('Error while saving sport. Try again!');
+            switch (err.name) {
+                case "RangeError":
+                    res.status(400).send(err.message);
+                    break;
+                case "MongoError":
+                    res.status(400).send("The provided name is too similar. Choose a diffrent name for the new sport.");
+                    break;
+
+                case "ValidationError":
+                    res.status(400).send("Some input are not correct. See if you forgot anything!");
+                    break;
+
+                default:
+                    res.status(500).send("Something went wrong while trying to save the sport. Try again!");
+                    break;
             }
         }
     } else {

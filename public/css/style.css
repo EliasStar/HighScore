@@ -202,6 +202,30 @@ main {
     text-align: right;
 }
 
+.formular {
+    margin: 0 10px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.formular>label {
+    text-align: right;
+}
+
+.formular-buttons>button {
+    margin: 0 5px;
+}
+
+.formular-buttons>button:first-child {
+    margin-left: 0;
+}
+
+.formular-buttons>button:last-child {
+    margin-right: 0;
+}
+
 .container {
     margin-bottom: var(--container-gap);
 
@@ -220,6 +244,14 @@ main {
     padding: 10px 15px;
 }
 
+.container>footer {
+    text-align: right;
+    border-top: var(--border-width) solid var(--border-color);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    padding: 10px 15px;
+}
+
 .container>.content {
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
@@ -233,6 +265,7 @@ main {
     border-radius: var(--border-radius);
 
     padding: 15px;
+    margin-bottom: 15px;
 
     color: var(--error-text-color);
     background-color: var(--error-background-color);
@@ -245,7 +278,7 @@ main {
 
 .error-message>.error-description {
     font-style: italic;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 
@@ -262,11 +295,24 @@ main {
     display: none;
 }
 
+#error-container .error-message {
+    margin-bottom: 0;
+}
+
 #path {
     font-size: 10pt;
     font-style: italic;
     padding: 7px 15px;
     border-radius: var(--border-radius);
+}
+
+#new-sport input[name="name"],
+#new-sport input[name="unit"] {
+    width: 200px;
+}
+
+#new-sport input[name="unitSymbol"] {
+    width: 50px;
 }
 
 #footer {
@@ -315,6 +361,12 @@ main {
 
 #options>span>span {
     float: right;
+}
+
+#options .input {
+    font-family: 'Raleway', 'Roboto', sans-serif;
+    font-size: 14px;
+    height: var(--footer-button-size);
 }
 
 #buttons {

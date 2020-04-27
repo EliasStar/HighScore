@@ -1,6 +1,7 @@
-import mongo from 'mongoose';
+import mongo, { Model, Document } from 'mongoose';
+import scoreSchema from "./score";
 
-const sport = new mongo.Schema({
+const sportSchema = new mongo.Schema({
     _id: {
         type: String,
         alias: 'id',
@@ -12,22 +13,37 @@ const sport = new mongo.Schema({
         trim: true,
         required: true
     },
-    unitName: {
+    unit: {
         type: String,
-        //enum: ['Zeit', 'Punkte', 'Strecke', 'Anzahl', 'Kraft'],
         trim: true,
         required: true
     },
-    unit: {
+    unitSymbol: {
         type: String,
-        //enum: ['s', 'min', 'h', 'x', 'km', 'm', 'cm', 'N']
         trim: true
     }
 });
 
-sport.pre('validate', function (nxt) {
+sportSchema.pre('validate', function (nxt) {
     this._id = (<string>this.get('name')).replace(/[^a-zA-Z0-9\.\-]+/g, '');
+
+    if (this._id === "sport" || this._id === "sports") {
+        throw new RangeError('Names containing the words "sport" and "sports" as their only alphanumeric parts are not allowed!');
+    }
+
     nxt();
 });
 
-export default mongo.model('Sport', sport);
+sportSchema.static('initSports', async function (this: Model<Document>) {
+    const sports = await this.find().exec();
+
+    sports.forEach(s => {
+        mongo.model(s.id, scoreSchema, s.id);
+    });
+});
+
+interface SportModel extends Model<Document> {
+    initSports(): Promise<void>;
+}
+
+export default mongo.model<Document, SportModel>('Sport', sportSchema);

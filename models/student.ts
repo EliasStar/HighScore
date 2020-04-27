@@ -1,8 +1,8 @@
 import http2 from 'http2';
 
 const client = http2.connect('https://www.dachsberg.at:443', () => console.log('[Database] Connected to Dachsberg.'));
-let studentList: Student[];
-let classes: string[];
+let studentList: Student[] = [];
+let classes: string[] = [];
 
 export interface Student {
     id: number,
@@ -27,50 +27,34 @@ export function updateStudentList() {
         'content-type': 'application/x-www-form-urlencoded',
         'content-length': Buffer.byteLength(body)
     }).setEncoding('utf8').on('response', headers => status = headers[":status"]).on('data', chunk => data += chunk).on('end', () => {
-        console.log(status);
-        if (typeof status === 'number') {
-            switch (status) {
-                case 200:
-                    let students: {
-                        studentId: string,
-                        firstName: string,
-                        lastName: string,
-                        cls: string,
-                        gender: 'M' | 'W'
-                    }[] = JSON.parse(data);
+        let students: {
+            studentId: string,
+            firstName: string,
+            lastName: string,
+            cls: string,
+            gender: 'M' | 'W'
+        }[] = JSON.parse(data);
 
-                    studentList = students.map(student => {
-                        let className = student.cls.toUpperCase();
+        studentList = students.map(student => {
+            let className = student.cls.toUpperCase();
 
-                        if (!classes.includes(className)) {
-                            classes.push(className);
-                        }
-
-                        return {
-                            id: parseInt(student.studentId, 10),
-                            name: {
-                                first: student.firstName,
-                                last: student.lastName
-                            },
-                            class: className,
-                            gender: student.gender === 'M' ? 'male' : 'female'
-                        }
-                    });
-
-                    classes.sort();
-                    console.log('[Database] Updated student list.');
-                    break;
-
-                case 304:
-                    console.log('[Database] Student list did not change.');
-                    break;
-
-                default:
-                    console.error('[Database] Unexpected status while updating student list: ' + status);
+            if (!classes.includes(className)) {
+                classes.push(className);
             }
-        } else {
-            console.error('[Database] Could not get status while updating student list.');
-        }
+
+            return {
+                id: parseInt(student.studentId, 10),
+                name: {
+                    first: student.firstName,
+                    last: student.lastName
+                },
+                class: className,
+                gender: student.gender === 'M' ? 'male' : 'female'
+            }
+        });
+
+        classes.sort();
+        console.log('[Database] Updated student list: ' + status);
     }).on('error', err => console.error('[Database] Error while updating student list: ' + err)).end(body);
 }
 
@@ -83,10 +67,10 @@ export function nameForID(id: number): string {
     return '';
 }
 
-export function find(gender: 'male' | 'female' | 'both', className: 'all' | string): Student[] {
+export function find(gender: 'male' | 'female' | 'both', className: 'ALL' | string): Student[] {
     let result: Student[] = [];
     studentList.forEach(student => {
-        if ((className === 'all' || student.class === className) && (gender === 'both' || student.gender === gender)) {
+        if ((className === 'ALL' || student.class === className) && (gender === 'both' || student.gender === gender)) {
             result.push(student);
         }
     });

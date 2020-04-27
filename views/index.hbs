@@ -56,7 +56,7 @@
             <span>
                 {{#if teacher}}
                 <label for="gender">Geschlecht:</label>
-                <select id="gender">
+                <select id="gender" class="input">
                     <option value="A" selected>Alle</option>
                     <option value="W">Mädchen</option>
                     <option value="M">Buben</option>
@@ -64,7 +64,7 @@
 
                 <span class="right">
                     <label for="class">Klasse:</label>
-                    <select id="class">
+                    <select id="class" class="input">
                         <option value="ALL" selected>Alle</option>
                         {{#if classes}}
                         {{#each classes}}

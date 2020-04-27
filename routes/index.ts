@@ -1,30 +1,12 @@
 import express from 'express';
+import mongo from 'mongoose';
+
+import Sport from "../models/sport";
+import { getClasses } from '../models/student';
+
 const router = express.Router();
 
-router.get('/', (req, res, nxt) => {
-    const sports = [
-        {
-            id: '1',
-            name: '100m Sprint',
-            score: '5.5',
-            unitSymbol: 's',
-            student: 'Ich'
-        },
-        {
-            id: '2',
-            name: '400m Sprint',
-            score: '9.34',
-            unitSymbol: 's',
-            student: 'Du'
-        },
-        {
-            id: '3',
-            name: 'Seil springen',
-            score: '10000',
-            unitSymbol: 'x'
-        }
-    ];
-
+router.get('/', async (req, res, nxt) => {
     if (!req.authenticated) {
         res.status(401).render('index', {
             currentContainer: 'public/auth/unauthorized',
@@ -33,14 +15,19 @@ router.get('/', (req, res, nxt) => {
         return;
     }
 
-    if (req.teacher) {
-        let classes: string[] = ["7N", "8N", "5N1", "5N3"];
+    const sports = await Sport.find().exec();
 
+    // sports.forEach(sport => {
+    //     mongo.model(sport.id);
+    // });
+
+
+    if (req.teacher) {
         res.render('index', {
             currentContainer: 'private/overview',
             sports: sports,
             teacher: true,
-            classes: classes
+            classes: getClasses()
         });
     } else {
         res.render('index', {

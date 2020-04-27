@@ -49,23 +49,6 @@ function postData(path, body) {
     }, currentContainer);
 }
 
-//NOT IMPLEMENTED
-function deleteData(path, body) {
-    bodyString = JSON.stringify(body);
-
-    callFetch(path, {
-        method: 'DELETE',
-        mode: 'same-origin',
-        redirect: 'follow',
-        referrer: 'no-referrer',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(bodyString)
-        },
-        body: bodyString
-    }, currentContainer);
-}
-
 async function callFetch(path, init, errorContainerElem) {
     if (busy) {
         return;
@@ -77,7 +60,7 @@ async function callFetch(path, init, errorContainerElem) {
     errorContainerElem.style.display = 'none';
     loadingContainer.style.display = 'block';
 
-    errorMessageElem = errorContainer.querySelector('.error-message');
+    errorMessageElem = errorContainerElem.querySelector('.error-message');
 
     errorTitleElem = errorMessageElem.querySelector('.error-title');
     errorDescriptionElem = errorMessageElem.querySelector('.error-description');

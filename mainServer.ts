@@ -12,8 +12,9 @@ import mongo from 'mongoose';
 import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 
 import redirectHTTP from './redirectServer'
+
+import Sport from './models/sport';
 import { updateStudentList, closeClient } from './models/student'
-import _ from './models/score'
 
 import indexRouter from './routes/index';
 import privateRouter from './routes/private';
@@ -76,6 +77,9 @@ app.use((req, res, nxt) => {
     req.authenticated = true;
     req.teacher = true;
 
+    req.query.class = req.query.class || "ALL";
+    req.query.gender = req.query.gender || "A";
+
     let end = res.end;
     res.end = function () {
         let authenticated = req.authenticated ? 'authenticated as ' + (req.teacher ? 'teacher' : 'student') : 'not authenticated';
@@ -110,7 +114,7 @@ app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
         console.error(err.stack);
         res.status(500).send(err.stack);
     } else {
-        res.status(500).end();
+        res.status(500).send("Something went wrong. Try again!");
     }
 }));
 
@@ -128,7 +132,8 @@ Promise.all([
         useUnifiedTopology: true,
         useCreateIndex: true
     }),
-    //updateStudentList()
+    Sport.initSports(),
+    updateStudentList()
 ]).then((values) => {
     mainServerTerminator = createHttpTerminator({
         server:

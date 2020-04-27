@@ -13,6 +13,7 @@ export default new mongo.Schema({
         type: String
     },
     createdAt: {
-        type: Date
+        type: Date,
+        default: Date.now()
     }
 });
