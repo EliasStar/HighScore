@@ -7,7 +7,7 @@ import { getClasses } from '../models/student';
 const router = express.Router();
 
 router.get('/', async (req, res, nxt) => {
-    if (!req.authenticated) {
+    if (!req.auth.authenticated) {
         res.status(401).render('index', {
             currentContainer: 'public/auth/unauthorized',
             teacher: false
@@ -22,7 +22,7 @@ router.get('/', async (req, res, nxt) => {
     // });
 
 
-    if (req.teacher) {
+    if (req.auth.teacher) {
         res.render('index', {
             currentContainer: 'private/overview',
             sports: sports,

@@ -1,0 +1,47 @@
+<div id="current-container" data-location="/private/new/performance">
+    <div class="container">
+        <p id="path">
+            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> / Neue Leistung
+        </p>
+    </div>
+    <div class="container">
+        <header>Aufzeichnung hinzufügen</header>
+        <div class="content">
+            <div class="error-message">
+                <p class="error-title"></p>
+                <p class="error-description"></p>
+            </div>
+
+            <div id="new-performance" class="formular" data-csrf-token="{{csrfToken}}">
+                <label for="sport">Sport*:</label>
+                <select class="ui input" name="sport">
+                    {{#unless sportSelected}}
+                        <option value="" hidden selected>Wählen Sie!</option>
+                    {{/unless}}
+                    {{#each sports}}
+                        <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                    {{/each}}
+                </select>
+
+                <label for="student">Schüler*:</label>
+                <select class="ui input" name="student">
+                    {{#unless studentSelected}}
+                        <option value="" hidden selected>Wählen Sie!</option>
+                    {{/unless}}
+                    {{#each students}}
+                        <option value="{{id}}" {{#if selected}}selected{{/if}}>[{{class}}] {{name.last}} {{name.first}}</option>
+                    {{/each}}
+                </select>
+
+                <label for="score">Leistung*:</label>
+                <input class="ui input" type="number" name="score" required>
+            </div>
+        </div>
+        <footer>
+            <div class="formular-buttons">
+                <button class="get-button ui btn btn-normal clickable" data-location="/private/overview">Abbrechen</button>
+                <button class="post-button ui btn btn-accent clickable" data-location="/private/new/performance" data-formular="new-performance">Speichern</button>
+            </div>
+        </footer>
+    </div>
+</div>

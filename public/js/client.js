@@ -5,12 +5,15 @@ let errorContainer;
 
 let params = '';
 let busy = false;
+let containerLocation = "";
 
 window.addEventListener('load', () => {
     main = document.querySelector('main');
     currentContainer = document.getElementById('current-container');
     loadingContainer = document.getElementById('loading-container');
     errorContainer = document.getElementById('error-container');
+
+    containerLocation = currentContainer.getAttribute('data-location');
 });
 
 function setParams(parameter) {
@@ -18,9 +21,8 @@ function setParams(parameter) {
 }
 
 function refreshContainer() {
-    let path = currentContainer.getAttribute('data-location')
-    if (path !== '') {
-        getContainer(path);
+    if (containerLocation !== '') {
+        getContainer(containerLocation);
     }
 }
 
@@ -28,7 +30,7 @@ function getContainer(path) {
     callFetch(path, {
         method: 'GET',
         mode: 'same-origin',
-        redirect: 'error',
+        redirect: 'follow',
         referrer: 'no-referrer'
     }, errorContainer);
 }
@@ -74,10 +76,14 @@ async function callFetch(path, init, errorContainerElem) {
             throw err;
         } else {
             let container = new DOMParser().parseFromString(await response.text(), "text/html").getElementById('current-container');
+
             currentContainer.remove();
             loadingContainer.style.display = 'none';
+
             currentContainer = main.appendChild(container);
-            initContainer();
+
+            initContainer(containerLocation);
+            containerLocation = currentContainer.getAttribute('data-location');
         }
     } catch (err) {
         if (typeof err.trace === 'undefined' || err.trace === '') {

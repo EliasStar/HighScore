@@ -1,33 +1,42 @@
-<div>
+<div id="current-container" data-location="/private/sport/{{sport.id}}">
     <div class="container">
         <p id="path">
-            <span id="path-overview" class="path-button clickable link hover">Übersicht</span> / {{sport.name}}
+            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> / {{sport.name}}
         </p>
     </div>
     <div class="container">
-        <header>{{sport.name}}</header>
+        <header>{{sport.name}}<span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}"></span></header>
         <div class="content">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>{{sport.unitName}}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each entries}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>{{score}}{{@root.sport.unit}}</td>
-                        <td>
-                            <span id="sport-{{@root.sport.id}}-student-{{id}}"
-                                class="next-button clickable btn-icon icon icon-circle-arrow-right"></span>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+            {{#if entries.length}}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>{{sport.unit}}</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each entries}}
+                            <tr>
+                                <td>{{name}}</td>
+                                <td>{{score}}{{@root.sport.unitSymbol}}</td>
+                                <td>
+                                    <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/new/sport/{{@root.sport.id}}/{{id}}"></span>
+                                    {{#if entry}}
+                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{id}}"></span>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{else}}
+                <div class="info-message">
+                    <p>Es sind keine Leistungen eingetragen.</p>
+                    <p>Erstellen Sie einen neuen Eintrag, indem Sie oben rechts auf den Knopf drücken.</p>
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>

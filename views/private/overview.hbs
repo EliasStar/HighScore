@@ -5,32 +5,40 @@
     <div class="container">
         <header>Übersicht</header>
         <div class="content">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Bestes Ergebnis</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each sports}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>
-                            {{score}}{{unitSymbol}}
-                            {{#if student}}
-                            ({{student}})
-                            {{/if}}
-                        </td>
-                        <td>
-                            <span class="get-button clickable btn-icon icon icon-circle-arrow-right"
-                                data-location="/private/sport/{{id}}"></span>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+            {{#if sports.length}}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sport</th>
+                            <th>Bestes Ergebnis</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each sports}}
+                            <tr>
+                                <td>{{name}}</td>
+                                <td>
+                                    {{score}}{{unitSymbol}}
+                                    {{#if teacher}}
+                                        ({{student}})
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{id}}"></span>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{else}}
+                <div class="info-message">
+                    <p>Es sind keine Sportarten eingetragen.</p>
+                    {{#if teacher}}
+                        <p>Erstellen Sie einen neuen Eintrag, indem sie in der Fußzeile den ersten Knopf verwenden.</p>
+                    {{/if}}
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>

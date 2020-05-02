@@ -14,7 +14,7 @@ import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 import redirectHTTP from './redirectServer'
 
 import Sport from './models/sport';
-import { updateStudentList, closeClient } from './models/student'
+import { updateStudentList, closeClient, genderFromString, classFromString } from './models/student'
 
 import indexRouter from './routes/index';
 import privateRouter from './routes/private';
@@ -74,15 +74,20 @@ app.use(csurf({
 }));
 app.use((req, res, nxt) => {
     //! Mock Auth
-    req.authenticated = true;
-    req.teacher = true;
+    req.auth = {
+        authenticated: true,
+        teacher: true,
+        id: 'BueK'
+    };
 
-    req.query.class = req.query.class || "ALL";
-    req.query.gender = req.query.gender || "A";
+    req.filter = {
+        class: classFromString(req.query.class),
+        gender: genderFromString(req.query.gender)
+    }
 
     let end = res.end;
     res.end = function () {
-        let authenticated = req.authenticated ? 'authenticated as ' + (req.teacher ? 'teacher' : 'student') : 'not authenticated';
+        let authenticated = req.auth.authenticated ? 'authenticated as ' + (req.auth.teacher ? 'teacher ' : 'student ') + req.auth.id : 'not authenticated';
 
         let queryString = Object.keys(req.query).map(key => key + '=' + req.query[key]).join('&');
         queryString = queryString !== '' ? '?' + queryString : '';

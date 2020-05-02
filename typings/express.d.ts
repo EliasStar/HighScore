@@ -1,6 +1,14 @@
 declare namespace Express {
     export interface Request {
-        authenticated?: boolean,
-        teacher?: boolean
+        auth: {
+            authenticated?: boolean;
+            teacher?: boolean;
+            id?: number | string;
+        };
+
+        filter: {
+            gender: 'male' | 'female' | 'both';
+            class: string;
+        };
     }
 }

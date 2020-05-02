@@ -1,7 +1,8 @@
 <div id="current-container">
     <div class="container">
-        <p id="path"><span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> /
-            Neuer Sport</p>
+        <p id="path">
+            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> / Neuer Sport
+        </p>
     </div>
     <div class="container">
         <header>Sport hinzufügen</header>
@@ -12,23 +13,20 @@
             </div>
 
             <div id="new-sport" class="formular" data-csrf-token="{{csrfToken}}">
-                <label for="name">Name:</label>
+                <label for="name">Name*:</label>
                 <input class="ui input" type="text" name="name" placeholder="60m Sprint" required>
 
-                <label for="unit">Maßeinheit:</label>
+                <label for="unit">Maßeinheit*:</label>
                 <input class="ui input" type="text" name="unit" placeholder="Zeit" required>
 
-                <label for="unitSymbol">Einheitenkürzel:</label>
+                <label for="unitSymbol">Einheitenkürzel :</label>
                 <input class="ui input" type="text" name="unitSymbol" placeholder="s">
-
             </div>
         </div>
         <footer>
             <div class="formular-buttons">
-                <button class="get-button ui btn btn-normal clickable"
-                    data-location="/private/overview">Abbrechen</button>
-                <button class="post-button ui btn btn-accent clickable" data-location="/private/new/sport"
-                    data-formular="new-sport">Speichern</button>
+                <button class="get-button ui btn btn-normal clickable" data-location="back">Abbrechen</button>
+                <button class="post-button ui btn btn-accent clickable" data-location="/private/new/sport" data-formular="new-sport">Speichern</button>
             </div>
         </footer>
     </div>

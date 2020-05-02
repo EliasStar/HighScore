@@ -18,7 +18,7 @@
     --container-gap: 25px;
 }
 
-:root[data-theme="light"] {
+:root[data-theme=light] {
     --foreground-color: white;
     --background-color: #f5f8fa;
 
@@ -29,6 +29,10 @@
     --accent-color: #3097d1;
     --accent-hover-color: #2579a9;
     --accent-press-color: #1f648b;
+
+    --info-text-color: #856404;
+    --info-background-color: #fff3cd;
+    --info-border-color: #ffeeba;
 
     --error-text-color: #a94442;
     --error-background-color: #f2dede;
@@ -51,7 +55,7 @@
     --icon-dark-display: inline;
 }
 
-:root[data-theme="dark"] {}
+:root[data-theme=dark] {}
 
 * {
     margin: 0;
@@ -78,6 +82,10 @@ main {
     align-items: center;
 }
 
+.right {
+    float: right;
+}
+
 .link {
     text-decoration: underline dotted;
 }
@@ -93,7 +101,7 @@ main {
 
 .icon {
     position: relative;
-    top: 1px;
+    top: 2px;
     display: inline-block;
     font-family: "Glyphicons Halflings";
     font-style: normal;
@@ -117,6 +125,11 @@ main {
 .input:focus {
     border-color: #98cbe8;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(152, 203, 232, .6);
+}
+
+.input-wrong {
+    border-color: var(--error-text-color);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(223, 94, 105, 0.6);
 }
 
 .btn {
@@ -261,7 +274,7 @@ main {
 .error-message {
     display: none;
 
-    border: var(--border-width) solid var(--border-color);
+    border: var(--border-width) solid var(--error-border-color);
     border-radius: var(--border-radius);
 
     padding: 15px;
@@ -269,18 +282,28 @@ main {
 
     color: var(--error-text-color);
     background-color: var(--error-background-color);
-    border-color: var(--error-border-color);
 }
 
-.error-message>.error-title {
+.info-message {
+    border: var(--border-width) solid var(--info-border-color);
+    border-radius: var(--border-radius);
+
+    padding: 15px;
+
+    color: var(--info-text-color);
+    background-color: var(--info-background-color);
+}
+
+.error-message>.error-title,
+.info-message>.info-title {
     font-weight: bold;
 }
 
-.error-message>.error-description {
+.error-message>.error-description,
+.info-message>.info-description {
     font-style: italic;
     white-space: pre-wrap;
 }
-
 
 #loading-container {
     display: none;
@@ -306,13 +329,22 @@ main {
     border-radius: var(--border-radius);
 }
 
-#new-sport input[name="name"],
-#new-sport input[name="unit"] {
+#new-sport input[name=name],
+#new-sport input[name=unit] {
     width: 200px;
 }
 
-#new-sport input[name="unitSymbol"] {
+#new-sport input[name=unitSymbol] {
     width: 50px;
+}
+
+#new-performance select[name=sport],
+#new-performance select[name=student] {
+    width: max-content;
+}
+
+#new-performance input[name=score] {
+    width: 100px;
 }
 
 #footer {

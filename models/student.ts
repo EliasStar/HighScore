@@ -5,13 +5,13 @@ let studentList: Student[] = [];
 let classes: string[] = [];
 
 export interface Student {
-    id: number,
+    id: number;
     name: {
-        first: string
-        last: string
-    },
-    class: string,
-    gender: 'male' | 'female'
+        first: string;
+        last: string;
+    };
+    class: string;
+    gender: 'male' | 'female';
 }
 
 client.on('error', err => console.error('[Database] Error from client: ' + err));
@@ -54,6 +54,21 @@ export function updateStudentList() {
         });
 
         classes.sort();
+        studentList.sort((a, b) => {
+            if (a.class < b.class) return -1;
+
+            if (a.class > b.class) return 1;
+
+            const nameA = `${a.name.last} ${a.name.first}`.toUpperCase();
+            const nameB = `${b.name.last} ${b.name.first}`.toUpperCase();
+
+            if (nameA < nameB) return -1;
+
+            if (nameA > nameB) return 1;
+
+            return 0;
+        });
+
         console.log('[Database] Updated student list: ' + status);
     }).on('error', err => console.error('[Database] Error while updating student list: ' + err)).end(body);
 }
@@ -93,4 +108,25 @@ export function getClasses(): string[] {
 
 export function closeClient() {
     client.close();
+}
+
+export function genderFromString(gender?: string): 'male' | 'female' | 'both' {
+    if (!gender) return "both";
+
+    switch (gender.toUpperCase()) {
+        case 'M': return "male";
+        case 'F':
+        case "W": return "female";
+        default: return "both"
+    }
+}
+
+export function classFromString(className?: string): string {
+    if (className) {
+        for (const cls of classes) {
+            if (className.toUpperCase() === cls) return cls;
+        }
+    }
+
+    return "ALL";
 }
