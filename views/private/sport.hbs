@@ -5,7 +5,10 @@
         </p>
     </div>
     <div class="container">
-        <header>{{sport.name}}<span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}"></span></header>
+        <header>
+            {{sport.name}}
+            <span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}"></span>
+        </header>
         <div class="content">
             {{#if entries.length}}
                 <table class="table">
@@ -22,9 +25,9 @@
                                 <td>{{name}}</td>
                                 <td>{{score}}{{@root.sport.unitSymbol}}</td>
                                 <td>
-                                    <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/new/sport/{{@root.sport.id}}/{{id}}"></span>
+                                    <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student}}"></span>
                                     {{#if entry}}
-                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{id}}"></span>
+                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{student}}"></span>
                                     {{/if}}
                                 </td>
                             </tr>

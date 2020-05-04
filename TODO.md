@@ -6,7 +6,7 @@
 - [x] 404 handling
 - [x] 5xx handling
 - [x] routes
-- [ ] database integration
-- [ ] views
+- [x] database integration
+- [x] views
 - [ ] i18n
 - [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)

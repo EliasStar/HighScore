@@ -15,12 +15,7 @@ router.get('/', async (req, res, nxt) => {
         return;
     }
 
-    const sports = await Sport.find().exec();
-
-    // sports.forEach(sport => {
-    //     mongo.model(sport.id);
-    // });
-
+    const sports = await Sport.find();
 
     if (req.auth.teacher) {
         res.render('index', {

@@ -16,7 +16,7 @@ privateRouter.use((req, res, nxt) => {
 });
 
 privateRouter.get('/overview', async (req, res) => {
-    const sports = await Sport.find().exec();
+    const sports = await Sport.find();
 
     res.render('private/overview', {
         teacher: req.auth.teacher,
@@ -25,13 +25,19 @@ privateRouter.get('/overview', async (req, res) => {
 });
 
 privateRouter.get('/sport/:id', async (req, res) => {
+    if (!req.auth.teacher) {
+        res.redirect(308, `/private/sport/${req.params.id}/${req.auth.id}`);
+    }
+
     try {
-        const sport = await Sport.findById(req.params.id).exec();
+        const sport = await Sport.findById(req.params.id);
         if (!sport) { throw null; }
 
-        const Entry = mongo.model(sport.id);
+        const Performance = mongo.model(sport.id);
 
-        const entries = await Entry.find().exec();
+        const entries: ({ entry?: boolean } & mongo.Document)[] = await Performance.find();
+
+        entries.forEach(entry => entry.entry = true);
 
         res.render('private/sport', {
             all: true,
@@ -43,12 +49,55 @@ privateRouter.get('/sport/:id', async (req, res) => {
     }
 });
 
+privateRouter.get('/sport/:sport/:student', async (req, res) => {
+    //! Check if student may access info
+    try {
+        const sport = await Sport.findById(req.params.sport);
+        if (!sport) { throw null; }
 
+        const student = Student.findById(req.params.student);
+        if (!student) { throw null; }
 
-//* Teacher only
+        const Performance = mongo.model(sport.id);
 
-privateRouter.get('/sport/:sport/:student', (req, res) => {
+        const entries = await Performance.find({ student: req.params.student });
 
+        res.render('private/student', {
+            csrfToken: req.csrfToken(),
+            teacher: req.auth.teacher,
+            sport: sport,
+            student: student,
+            entries: entries
+        });
+    } catch (err) {
+        res.redirect(404, "/private/overview");
+    }
+});
+
+privateRouter.delete('/sport/:sport/:student/:id', async (req, res) => {
+    if (!req.auth.teacher) {
+        res.status(403).render('public/auth/forbidden');
+        return;
+    }
+
+    //! Check if not deleting sport
+    try {
+        const Performance = mongo.model(req.params.sport);
+
+        await Performance.remove({ _id: req.params.id, student: req.params.student });
+
+        res.redirect(303, `/private/sport/${req.params.sport}/${req.params.student}?gender=${req.filter.gender}&class=${req.filter.class}`);
+    } catch (err) {
+        switch (err.name) {
+            case "MissingSchemaError":
+                res.status(400).send("Cannot find specified sport. Try reloading the page!");
+                break;
+
+            default:
+                res.status(500).send("Something went wrong while trying to save the sport. Try again!");
+                break;
+        }
+    }
 });
 
 privateRouter.get('/new/sport', (req, res) => {
@@ -104,7 +153,7 @@ privateRouter.get('/new/performance/:sport?/:student?', async (req, res) => {
     }
 
     try {
-        const sports: ({ selected?: boolean } & mongo.Document)[] = await Sport.find().exec();
+        const sports: ({ selected?: boolean } & mongo.Document)[] = await Sport.find();
         const students: ({ selected?: boolean } & Student.Student)[] = Student.find(req.filter.gender, req.filter.class);
 
         let sportSelected = false;
@@ -159,8 +208,6 @@ privateRouter.post('/new/performance', async (req, res) => {
 
         res.redirect(303, `/private/sport/${req.body.sport}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
-        console.error(err);
-
         switch (err.name) {
             case "MissingSchemaError":
                 res.status(400).send("Cannot find specified sport. Try reloading the page!");

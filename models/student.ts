@@ -5,7 +5,7 @@ let studentList: Student[] = [];
 let classes: string[] = [];
 
 export interface Student {
-    id: number;
+    id: string;
     name: {
         first: string;
         last: string;
@@ -43,7 +43,7 @@ export function updateStudentList() {
             }
 
             return {
-                id: parseInt(student.studentId, 10),
+                id: student.studentId,
                 name: {
                     first: student.firstName,
                     last: student.lastName
@@ -73,12 +73,13 @@ export function updateStudentList() {
     }).on('error', err => console.error('[Database] Error while updating student list: ' + err)).end(body);
 }
 
-export function nameForID(id: number): string {
-    studentList.forEach(student => {
+export function nameForID(id: string): string {
+    for (const student of studentList) {
         if (student.id === id) {
             return `${student.name.last} ${student.name.first}`;
         }
-    });
+    }
+
     return '';
 }
 
@@ -92,12 +93,12 @@ export function find(gender: 'male' | 'female' | 'both', className: 'ALL' | stri
     return result;
 }
 
-export function findById(id: number): Student | undefined {
-    studentList.forEach(student => {
+export function findById(id: string): Student | undefined {
+    for (const student of studentList) {
         if (student.id === id) {
             return student;
         }
-    });
+    }
     return undefined;
 }
 

@@ -1,25 +1,48 @@
-<div id="current-container">
+<div id="current-container" data-location="/private/sport/{{sport.id}}/{{student.id}}">
     <div class="container">
         <p id="path">
-            <span id="path-overview" class="path-button clickable link hover">Übersicht</span> / {{sport.name}}
+            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span>
+            /
+            <span class="get-button clickable link hover" data-location="/private/sport/{{sport.id}}">{{sport.name}}</span>
+            /
+            {{student.name.last}} {{student.name.first}}
         </p>
     </div>
     <div class="container">
-        <header>{{sport.name}}</header>
+        <header>
+            {{sport.name}}
+            {{#if teacher}}
+                von {{student.name.first}}
+                <span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}/{{student.id}}"></span>
+            {{/if}}
+        </header>
         <div class="content">
+            <div class="error-message">
+                <p class="error-title"></p>
+                <p class="error-description"></p>
+            </div>
+
             <table class="table">
                 <thead>
                     <tr>
                         <th>{{sport.unit}}</th>
-                        <th></th>
+                        <th>Lehrer</th>
+                        {{#if teacher}}
+                            <th></th>
+                        {{/if}}
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each scores}}
-                    <tr>
-                        <td>{{this}} {{@root.sport.unitSymbol}}</td>
-                        <td></td>
-                    </tr>
+                    {{#each entries}}
+                        <tr>
+                            <td>{{score}}{{@root.sport.unitSymbol}}</td>
+                            <td>{{teacher}}</td>
+                            {{#if @root.teacher}}
+                                <td>
+                                    <span class="delete-button clickable btn-icon icon icon-remove-sign" data-location="/private/sport/{{@root.sport.id}}/{{@root.student.id}}/{{id}}" data-csrf-token="{{@root.csrfToken}}"></span>
+                                </td>
+                            {{/if}}
+                        </tr>
                     {{/each}}
                 </tbody>
             </table>

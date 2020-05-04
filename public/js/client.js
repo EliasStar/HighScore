@@ -35,11 +35,28 @@ function getContainer(path) {
     }, errorContainer);
 }
 
-function postData(path, body) {
-    bodyString = JSON.stringify(body);
+function postData(path, csrfToken, data) {
+    data["csrfToken"] = csrfToken;
+    bodyString = JSON.stringify(data);
 
     callFetch(path, {
         method: 'POST',
+        mode: 'same-origin',
+        redirect: 'follow',
+        referrer: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': (new TextEncoder().encode(bodyString)).length
+        },
+        body: bodyString
+    }, currentContainer);
+}
+
+function deleteData(path, csrfToken) {
+    bodyString = JSON.stringify({ csrfToken: csrfToken });
+
+    callFetch(path, {
+        method: 'DELETE',
         mode: 'same-origin',
         redirect: 'follow',
         referrer: 'no-referrer',
