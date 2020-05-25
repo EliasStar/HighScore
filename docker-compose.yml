@@ -4,7 +4,7 @@ services:
   highscore:
     image: "node:13.12-stretch"
     environment:
-      SCRIPT_PATH: "/src/node_modules/.bin/"
+      SCRIPT_PATH: "/highscore/node_modules/.bin/"
       NODE_ENV: "development"
       DATABASE_URI: "mongodb://db:27017/"
       DATABASE_NAME: "highscore"
@@ -15,11 +15,11 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - "./:/src/"
-      - "node-modules:/src/node_modules/"
-    working_dir: "/src/"
+      - "./:/highscore/"
+      - "node-modules:/highscore/node_modules/"
+    working_dir: "/highscore/"
     entrypoint:
-      - "/src/wait-for-exit.sh"
+      - "/highscore/wait-for-exit.sh"
       - "highscore-installer"
       - "nodemon"
     depends_on:
@@ -29,9 +29,9 @@ services:
   highscore-installer:
     image: "node:13.12-stretch"
     volumes:
-      - "./:/src/"
-      - "node-modules:/src/node_modules/"
-    working_dir: "/src/"
+      - "./:/highscore/"
+      - "node-modules:/highscore/node_modules/"
+    working_dir: "/highscore/"
     command: "npm install"
 
   mongo-console:

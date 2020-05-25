@@ -14,9 +14,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./*",
-    "./routes/*",
-    "./typings/*.d.ts"
+    "./src/**/*"
   ],
   "exclude": []
 }

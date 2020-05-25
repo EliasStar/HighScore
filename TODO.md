@@ -9,4 +9,5 @@
 - [x] database integration
 - [x] views
 - [ ] i18n
+- [ ] xss protection
 - [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)

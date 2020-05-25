@@ -4,5 +4,5 @@
     ],
     "ext": ".ts",
     "ignore": [],
-    "exec": "ts-node --files ./mainServer.ts"
+    "exec": "ts-node --files ./src/mainServer.ts"
 }
