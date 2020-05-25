@@ -10,4 +10,6 @@
 - [x] views
 - [ ] i18n
 - [ ] xss protection
+- [ ] secure db
+- [ ] refactoring
 - [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)

@@ -28,13 +28,14 @@ const httpsPort = parseInt(process.env.HTTPS_PORT || '443', 10);
 const dbURI = process.env.DATABASE_URI;
 const dbName = process.env.DATABASE_NAME;
 const cookieSecret = process.env.COOKIE_SECRET;
-let keyPath = process.env.KEY_PATH;
-let certPath = process.env.CERTIFICATE_PATH;
+const keyPath = process.env.KEY_PATH;
+const certPath = process.env.CERTIFICATE_PATH;
 
-if (httpPort !== NaN && httpsPort !== NaN && dbURI !== undefined && dbName !== undefined && cookieSecret !== undefined && keyPath !== undefined && certPath !== undefined) {
-    keyPath = join(__dirname, keyPath);
-    certPath = join(__dirname, certPath);
-} else {
+if (typeof dbURI === "undefined" ||
+    typeof dbName === "undefined" ||
+    typeof cookieSecret === "undefined" ||
+    typeof keyPath === "undefined" ||
+    typeof certPath === "undefined") {
     console.error('[HighScore] Environment variables are not correctly set!');
     process.exit(32);
 }
