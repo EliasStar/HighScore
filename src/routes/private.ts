@@ -198,9 +198,8 @@ privateRouter.post('/new/performance', async (req, res) => {
     }
 
     try {
-        console.log(req.body);
-        console.log(req.auth.id);
-        const Performance = mongo.model(req.body.sport)
+        const Performance = mongo.model(req.body.sport);
+
         const entry = new Performance({
             student: req.body.student,
             score: req.body.score,
@@ -211,7 +210,6 @@ privateRouter.post('/new/performance', async (req, res) => {
 
         res.redirect(303, `/private/sport/${req.body.sport}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
-        console.log(err);
         switch (err.name) {
             case "MissingSchemaError":
                 res.status(400).send("Cannot find specified sport. Try reloading the page!");
