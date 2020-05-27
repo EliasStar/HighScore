@@ -198,23 +198,25 @@ privateRouter.post('/new/performance', async (req, res) => {
     }
 
     try {
-        const performance = new (mongo.model(req.body.sport))({
+        console.log(req.body);
+        console.log(req.auth.id);
+        const Performance = mongo.model(req.body.sport)
+        const entry = new Performance({
             student: req.body.student,
             score: req.body.score,
             teacher: req.auth.id
         });
 
-        await performance.save();
+        await entry.save();
 
         res.redirect(303, `/private/sport/${req.body.sport}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
+        console.log(err);
         switch (err.name) {
             case "MissingSchemaError":
                 res.status(400).send("Cannot find specified sport. Try reloading the page!");
                 break;
-            case "MongoError":
-                res.status(400).send("The provided name is too similar. Choose a diffrent name for the new sport.");
-                break;
+
             case "ValidationError":
                 res.status(400).send("Some input are not correct. See if you forgot anything!");
                 break;

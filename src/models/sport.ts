@@ -4,7 +4,6 @@ import performanceSchema from "./performance";
 const sportSchema = new mongo.Schema({
     _id: {
         type: String,
-        alias: 'id',
         lowercase: true,
         required: true
     },
@@ -38,7 +37,7 @@ sportSchema.static('initSports', async function (this: Model<Document>) {
     const sports = await this.find().exec();
 
     sports.forEach(s => {
-        mongo.model(s.id, performanceSchema, s.id);
+        mongo.model(s._id, performanceSchema, s._id);
     });
 });
 

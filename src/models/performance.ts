@@ -1,17 +1,11 @@
 import mongo from 'mongoose';
 
 export default new mongo.Schema({
-    _id: {
-        type: mongo.Types.ObjectId,
-        alias: 'id',
-        required: true,
-        default: new mongo.Types.ObjectId()
-    },
     student: {
         type: String,
         trim: true,
         required: true,
-        match: /^\d{14}$/gi
+        match: /^\d{14}$/
     },
     score: {
         type: Number,
@@ -21,7 +15,7 @@ export default new mongo.Schema({
         type: String,
         trim: true,
         required: true,
-        match: /^[A-Z][a-z]{2}[A-Z]$/g
+        match: /^[A-Z][a-z]{2}[A-Z]$/
     },
     expiresAt: {
         type: Date,
