@@ -31,11 +31,7 @@ const cookieSecret = process.env.COOKIE_SECRET;
 const keyPath = process.env.KEY_PATH;
 const certPath = process.env.CERTIFICATE_PATH;
 
-if (typeof dbURI === "undefined" ||
-    typeof dbName === "undefined" ||
-    typeof cookieSecret === "undefined" ||
-    typeof keyPath === "undefined" ||
-    typeof certPath === "undefined") {
+if (dbURI == null || dbName == null || cookieSecret == null || keyPath == null || certPath == null) {
     console.error("[HighScore] Environment variables are not correctly set!");
     process.exit(32);
 }

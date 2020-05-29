@@ -31,21 +31,45 @@ privateRouter.get("/sport/:id", async (req, res) => {
 
     try {
         const sport = await Sport.findById(req.params.id);
-        if (!sport) throw null;
+        if (sport == null) throw null;
 
         const Performance = mongo.model(sport.id);
 
         const students = Student.find(req.filter.gender, req.filter.class);
 
-        const ids = students.map(student => student.id);
+        const docs: { _id: string, score: number }[] = await Performance.aggregate([
+            { $match: { student: { $in: students.map(student => student.id) } } },
+            { $group: { _id: "$student", "score": { $max: "$score" } } }
+        ]);
 
-        const entries: ({ entry?: boolean } & mongo.Document)[] = await Performance.find({ _id: { $in: ids } });
+        const entries = students.map(student => {
+            const doc = docs.find(doc => doc._id === student.id);
 
-        entries.forEach(entry => entry.entry = true);
+            if (doc != null) return {
+                student: {
+                    id: student.id,
+                    name: Student.nameForID(student.id)
+                },
+                score: doc.score,
+                entry: true
+            };
+
+            if (req.filter.class !== "ALL") return {
+                student: {
+                    id: student.id,
+                    name: Student.nameForID(student.id)
+                },
+                entry: false
+            };
+        }).filter(entry => entry != null);
 
         res.render("private/sport", {
-            all: true,
-            sport: sport,
+            sport: {
+                id: sport._id,
+                name: sport.name,
+                unit: sport.unit,
+                unitSymbol: sport.unitSymbol
+            },
             entries: entries
         });
     } catch (err) {

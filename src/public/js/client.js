@@ -103,7 +103,7 @@ async function callFetch(path, init, errorContainerElem) {
             containerLocation = currentContainer.getAttribute("data-location");
         }
     } catch (err) {
-        if (typeof err.trace === "undefined" || err.trace === "") {
+        if (err.trace == null || err.trace === "") {
             errorTitleElem.textContent = err.name;
             errorDescriptionElem.textContent = err.message;
         } else {

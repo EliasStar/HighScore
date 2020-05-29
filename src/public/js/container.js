@@ -20,14 +20,14 @@ function initContainer(prevLocation) {
 
 function onGETButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
-    elem = elem.nodeType == 3 ? elem.parentNode : elem;
+    elem = elem.nodeType === 3 ? elem.parentNode : elem;
 
     getContainer(elem.getAttribute("data-location"));
 }
 
 function onPOSTButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
-    elem = elem.nodeType == 3 ? elem.parentNode : elem;
+    elem = elem.nodeType === 3 ? elem.parentNode : elem;
 
     const form = document.getElementById(elem.getAttribute("data-formular"));
 
@@ -61,7 +61,7 @@ function onPOSTButtonPressed(evt) {
 
 function onDELETEButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
-    elem = elem.nodeType == 3 ? elem.parentNode : elem;
+    elem = elem.nodeType === 3 ? elem.parentNode : elem;
 
     deleteData(elem.getAttribute("data-location"), elem.getAttribute("data-csrf-token"));
 }

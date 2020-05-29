@@ -22,14 +22,20 @@
                     <tbody>
                         {{#each entries}}
                             <tr>
-                                <td>{{name}}</td>
-                                <td>{{score}}{{@root.sport.unitSymbol}}</td>
-                                <td>
-                                    <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student}}"></span>
-                                    {{#if entry}}
-                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{student}}"></span>
-                                    {{/if}}
-                                </td>
+                                <td>{{student.name}}</td>
+                                {{#if entry}}
+                                    <td>{{score}}{{@root.sport.unitSymbol}}</td>
+                                    <td>
+                                        <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
+                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{student.id}}"></span>
+                                    </td>
+                                {{else}}
+                                    <td></td>
+                                    <td>
+                                        <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
+                                    </td>
+                                {{/if}}
+
                             </tr>
                         {{/each}}
                     </tbody>

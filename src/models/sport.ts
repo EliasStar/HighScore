@@ -27,7 +27,7 @@ sportSchema.pre("validate", function (nxt) {
     this._id = (<string>this.get("name")).replace(/[^a-zA-Z0-9\.\-]+/g, "");
 
     if (this._id === "sport" || this._id === "sports") {
-        throw new RangeError("Names containing the words "sport" and "sports" as their only alphanumeric parts are not allowed!");
+        throw new RangeError('Names containing the words "sport" and "sports" as their only alphanumeric parts are not allowed!');
     }
 
     nxt();
@@ -41,8 +41,14 @@ sportSchema.static("initSports", async function (this: Model<Document>) {
     });
 });
 
-interface SportModel extends Model<Document> {
+interface SportModel extends Model<SportDocument> {
     initSports(): Promise<void>;
 }
 
-export default mongo.model<Document, SportModel>("Sport", sportSchema);
+interface SportDocument extends Document {
+    name: string;
+    unit: string;
+    unitSymbol: string;
+}
+
+export default mongo.model<SportDocument, SportModel>("Sport", sportSchema);
