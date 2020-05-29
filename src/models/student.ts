@@ -1,6 +1,6 @@
-import http2 from 'http2';
+import http2 from "http2";
 
-const client = http2.connect('https://www.dachsberg.at:443', () => console.log('[Database] Connected to Dachsberg.'));
+const client = http2.connect("https://www.dachsberg.at:443", () => console.log("[Database] Connected to Dachsberg."));
 let studentList: Student[] = [];
 let classes: string[] = [];
 
@@ -11,28 +11,28 @@ export interface Student {
         last: string;
     };
     class: string;
-    gender: 'male' | 'female';
+    gender: "male" | "female";
 }
 
-client.on('error', err => console.error('[Database] Error from client: ' + err));
+client.on("error", err => console.error("[Database] Error from client: " + err));
 
 export function updateStudentList() {
-    const body = 'request=studentList';
-    let data = '';
+    const body = "request=studentList";
+    let data = "";
     let status: number | undefined;
 
     client.request({
-        ':method': 'POST',
-        ':path': '/services/_api/scoreService.php',
-        'content-type': 'application/x-www-form-urlencoded',
-        'content-length': Buffer.byteLength(body)
-    }).setEncoding('utf8').on('response', headers => status = headers[":status"]).on('data', chunk => data += chunk).on('end', () => {
+        ":method": "POST",
+        ":path": "/services/_api/scoreService.php",
+        "content-type": "application/x-www-form-urlencoded",
+        "content-length": Buffer.byteLength(body)
+    }).setEncoding("utf8").on("response", headers => status = headers[":status"]).on("data", chunk => data += chunk).on("end", () => {
         let students: {
             studentId: string,
             firstName: string,
             lastName: string,
             cls: string,
-            gender: 'M' | 'W'
+            gender: "M" | "W"
         }[] = JSON.parse(data);
 
         studentList = students.map(student => {
@@ -49,7 +49,7 @@ export function updateStudentList() {
                     last: student.lastName
                 },
                 class: className,
-                gender: student.gender === 'M' ? 'male' : 'female'
+                gender: student.gender === "M" ? "male" : "female"
             }
         });
 
@@ -69,8 +69,8 @@ export function updateStudentList() {
             return 0;
         });
 
-        console.log('[Database] Updated student list: ' + status);
-    }).on('error', err => console.error('[Database] Error while updating student list: ' + err)).end(body);
+        console.log("[Database] Updated student list: " + status);
+    }).on("error", err => console.error("[Database] Error while updating student list: " + err)).end(body);
 }
 
 export function nameForID(id: string): string {
@@ -80,13 +80,13 @@ export function nameForID(id: string): string {
         }
     }
 
-    return '';
+    return "";
 }
 
-export function find(gender: 'male' | 'female' | 'both', className: 'ALL' | string): Student[] {
+export function find(gender: "male" | "female" | "both", className: "ALL" | string): Student[] {
     let result: Student[] = [];
     studentList.forEach(student => {
-        if ((className === 'ALL' || student.class === className) && (gender === 'both' || student.gender === gender)) {
+        if ((className === "ALL" || student.class === className) && (gender === "both" || student.gender === gender)) {
             result.push(student);
         }
     });
@@ -111,18 +111,19 @@ export function closeClient() {
     client.close();
 }
 
-export function genderFromString(gender?: string): 'male' | 'female' | 'both' {
+export function genderFromString(gender?: string): "male" | "female" | "both" {
     if (!gender) return "both";
 
     switch (gender.toUpperCase()) {
-        case 'M': return "male";
-        case 'F':
-        case "W": return "female";
+        case "MALE":
+        case "M": return "male";
+        case "FEMALE":
+        case "F": return "female";
         default: return "both"
     }
 }
 
-export function classFromString(className?: string): string {
+export function classFromString(className?: string): "ALL" | string {
     if (className) {
         for (const cls of classes) {
             if (className.toUpperCase() === cls) return cls;

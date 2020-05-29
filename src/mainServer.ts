@@ -1,30 +1,30 @@
-import express, { ErrorRequestHandler } from 'express';
-import https from 'https';
-import { readFile } from 'fs';
-import { promisify } from 'util';
-import { join } from 'path';
-import hbs from 'hbs';
-import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
-import compression from 'compression';
-import csurf from 'csurf';
-import mongo from 'mongoose';
-import { createHttpTerminator, HttpTerminator } from 'http-terminator';
+import express, { ErrorRequestHandler } from "express";
+import https from "https";
+import { readFile } from "fs";
+import { promisify } from "util";
+import { join } from "path";
+import hbs from "hbs";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import compression from "compression";
+import csurf from "csurf";
+import mongo from "mongoose";
+import { createHttpTerminator, HttpTerminator } from "http-terminator";
 
-import redirectHTTP from './redirectServer'
+import redirectHTTP from "./redirectServer"
 
-import Sport from './models/sport';
-import { updateStudentList, closeClient, genderFromString, classFromString } from './models/student'
+import Sport from "./models/sport";
+import { updateStudentList, closeClient, genderFromString, classFromString } from "./models/student"
 
-import indexRouter from './routes/index';
-import privateRouter from './routes/private';
-import publicRouter from './routes/public';
+import indexRouter from "./routes/index";
+import privateRouter from "./routes/private";
+import publicRouter from "./routes/public";
 
 
 //Environment variables
-const debug = process.env.NODE_ENV === 'development';
-const httpPort = parseInt(process.env.HTTP_PORT || '80', 10);
-const httpsPort = parseInt(process.env.HTTPS_PORT || '443', 10);
+const debug = process.env.NODE_ENV === "development";
+const httpPort = parseInt(process.env.HTTP_PORT || "80", 10);
+const httpsPort = parseInt(process.env.HTTPS_PORT || "443", 10);
 const dbURI = process.env.DATABASE_URI;
 const dbName = process.env.DATABASE_NAME;
 const cookieSecret = process.env.COOKIE_SECRET;
@@ -36,13 +36,13 @@ if (typeof dbURI === "undefined" ||
     typeof cookieSecret === "undefined" ||
     typeof keyPath === "undefined" ||
     typeof certPath === "undefined") {
-    console.error('[HighScore] Environment variables are not correctly set!');
+    console.error("[HighScore] Environment variables are not correctly set!");
     process.exit(32);
 }
 
 //Constants
-const viewsPath = join(__dirname, 'views');
-const staticPath = join(__dirname, 'public');
+const viewsPath = join(__dirname, "views");
+const staticPath = join(__dirname, "public");
 const app = express();
 
 //Variables
@@ -51,9 +51,9 @@ let redirectServerTerminator: HttpTerminator;
 
 
 //Options
-app.set('port', httpsPort);
-app.set('view engine', 'hbs');
-app.set('views', viewsPath);
+app.set("port", httpsPort);
+app.set("view engine", "hbs");
+app.set("views", viewsPath);
 hbs.registerPartials(viewsPath);
 
 //Middleware
@@ -63,7 +63,7 @@ app.use(helmet());
 app.use(compression());
 app.use(csurf({
     cookie: {
-        key: 'csrfToken',
+        key: "csrfToken",
         signed: true,
         secure: true,
         httpOnly: true,
@@ -78,20 +78,20 @@ app.use((req, res, nxt) => {
     req.auth = {
         authenticated: true,
         teacher: true,
-        id: 'BueK'
+        id: "BueK"
     };
 
     req.filter = {
-        class: classFromString(req.query.class),
-        gender: genderFromString(req.query.gender)
+        gender: genderFromString(req.query.gender),
+        class: classFromString(req.query.class)
     }
 
     let end = res.end;
     res.end = function () {
-        let authenticated = req.auth.authenticated ? 'authenticated as ' + (req.auth.teacher ? 'teacher ' : 'student ') + req.auth.id : 'not authenticated';
+        let authenticated = req.auth.authenticated ? "authenticated as " + (req.auth.teacher ? "teacher " : "student ") + req.auth.id : "not authenticated";
 
-        let queryString = Object.keys(req.query).map(key => key + '=' + req.query[key]).join('&');
-        queryString = queryString !== '' ? '?' + queryString : '';
+        let queryString = Object.keys(req.query).map(key => key + "=" + req.query[key]).join("&");
+        queryString = queryString !== "" ? "?" + queryString : "";
 
         console.log(`[MainServer] ${req.method}\t${req.path}${queryString}\t${res.statusCode} | ${authenticated}`);
 
@@ -102,13 +102,13 @@ app.use((req, res, nxt) => {
 });
 
 //Routes
-app.use('/', indexRouter);
-app.use('/private', privateRouter);
-app.use('/public', express.static(staticPath), publicRouter);
+app.use("/", indexRouter);
+app.use("/private", privateRouter);
+app.use("/public", express.static(staticPath), publicRouter);
 
 //Error Handlers
 app.use((req, res, nxt) => {
-    res.redirect('/');
+    res.redirect("/");
 });
 
 app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
@@ -124,10 +124,10 @@ app.use(<ErrorRequestHandler>((err, req, res, nxt) => {
     }
 }));
 
-mongo.connection.once('connected', () => console.log('[Database] Connected to MongoDB.'))
-    .on('disconnected', () => console.log('[Database] Disconnected from MongoDB.'))
-    .on('reconnected', () => console.log('[Database] Reconnected to MongoDB.'))
-    .on('error', err => console.error('[Database] Encountered error:' + err));
+mongo.connection.once("connected", () => console.log("[Database] Connected to MongoDB."))
+    .on("disconnected", () => console.log("[Database] Disconnected from MongoDB."))
+    .on("reconnected", () => console.log("[Database] Reconnected to MongoDB."))
+    .on("error", err => console.error("[Database] Encountered error:" + err));
 
 Promise.all([
     promisify(readFile)(keyPath),
@@ -147,40 +147,40 @@ Promise.all([
                 key: values[0],
                 cert: values[1]
             }, app).listen(httpsPort, () => {
-                console.log('[MainServer] Listening on ' + httpsPort);
+                console.log("[MainServer] Listening on " + httpsPort);
                 redirectServerTerminator = createHttpTerminator({
                     server: redirectHTTP(httpPort, httpsPort)
                 });
             })
     });
 }).catch((err) => {
-    console.error('[HighScore] Encountered error while initializing: ' + err);
+    console.error("[HighScore] Encountered error while initializing: " + err);
     process.exit(33);
 });
 
 async function onExitSignalReceived() {
     try {
-        console.log('[HighScore] Terminating servers...');
+        console.log("[HighScore] Terminating servers...");
         await Promise.all([
             mainServerTerminator.terminate(),
             redirectServerTerminator.terminate()
         ]);
 
-        console.log('[HighScore] Closing database connections...');
+        console.log("[HighScore] Closing database connections...");
         await Promise.all([
             mongo.disconnect(),
             closeClient()
         ])
     } catch (err) {
-        console.error('[HighScore] Error during shutdown: ' + err);
+        console.error("[HighScore] Error during shutdown: " + err);
         process.exit(34);
     }
 
-    console.log('[HighScore] Done!');
+    console.log("[HighScore] Done!");
     process.exit(0);
 }
 
-process.once('SIGINT', onExitSignalReceived)
-    .once('SIGTERM', onExitSignalReceived)
-    .once('SIGHUP', onExitSignalReceived)
-    .once('SIGBREAK', onExitSignalReceived);
+process.once("SIGINT", onExitSignalReceived)
+    .once("SIGTERM", onExitSignalReceived)
+    .once("SIGHUP", onExitSignalReceived)
+    .once("SIGBREAK", onExitSignalReceived);

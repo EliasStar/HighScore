@@ -1,9 +1,9 @@
-import express from 'express';
-import mongo from 'mongoose';
+import express from "express";
+import mongo from "mongoose";
 
-import Sport from '../models/sport';
-import performanceSchema from '../models/performance';
-import * as Student from '../models/student';
+import Sport from "../models/sport";
+import performanceSchema from "../models/performance";
+import * as Student from "../models/student";
 
 const privateRouter = express.Router();
 
@@ -15,31 +15,35 @@ privateRouter.use((req, res, nxt) => {
     }
 });
 
-privateRouter.get('/overview', async (req, res) => {
+privateRouter.get("/overview", async (req, res) => {
     const sports = await Sport.find();
 
-    res.render('private/overview', {
+    res.render("private/overview", {
         teacher: req.auth.teacher,
         sports: sports
     });
 });
 
-privateRouter.get('/sport/:id', async (req, res) => {
+privateRouter.get("/sport/:id", async (req, res) => {
     if (!req.auth.teacher) {
         res.redirect(308, `/private/sport/${req.params.id}/${req.auth.id}`);
     }
 
     try {
         const sport = await Sport.findById(req.params.id);
-        if (!sport) { throw null; }
+        if (!sport) throw null;
 
         const Performance = mongo.model(sport.id);
 
-        const entries: ({ entry?: boolean } & mongo.Document)[] = await Performance.find();
+        const students = Student.find(req.filter.gender, req.filter.class);
+
+        const ids = students.map(student => student.id);
+
+        const entries: ({ entry?: boolean } & mongo.Document)[] = await Performance.find({ _id: { $in: ids } });
 
         entries.forEach(entry => entry.entry = true);
 
-        res.render('private/sport', {
+        res.render("private/sport", {
             all: true,
             sport: sport,
             entries: entries
@@ -49,7 +53,7 @@ privateRouter.get('/sport/:id', async (req, res) => {
     }
 });
 
-privateRouter.get('/sport/:sport/:student', async (req, res) => {
+privateRouter.get("/sport/:sport/:student", async (req, res) => {
     //! Check if student may access info
     try {
         const sport = await Sport.findById(req.params.sport);
@@ -62,7 +66,7 @@ privateRouter.get('/sport/:sport/:student', async (req, res) => {
 
         const entries = await Performance.find({ student: req.params.student });
 
-        res.render('private/student', {
+        res.render("private/student", {
             csrfToken: req.csrfToken(),
             teacher: req.auth.teacher,
             sport: sport,
@@ -74,9 +78,9 @@ privateRouter.get('/sport/:sport/:student', async (req, res) => {
     }
 });
 
-privateRouter.delete('/sport/:sport/:student/:id', async (req, res) => {
+privateRouter.delete("/sport/:sport/:student/:id", async (req, res) => {
     if (!req.auth.teacher) {
-        res.status(403).render('public/auth/forbidden');
+        res.status(403).render("public/auth/forbidden");
         return;
     }
 
@@ -100,17 +104,17 @@ privateRouter.delete('/sport/:sport/:student/:id', async (req, res) => {
     }
 });
 
-privateRouter.get('/new/sport', (req, res) => {
+privateRouter.get("/new/sport", (req, res) => {
     if (req.auth.teacher) {
-        res.render('private/new/sport', { csrfToken: req.csrfToken() });
+        res.render("private/new/sport", { csrfToken: req.csrfToken() });
     } else {
-        res.status(403).render('public/auth/forbidden');
+        res.status(403).render("public/auth/forbidden");
     }
 });
 
-privateRouter.post('/new/sport', async (req, res) => {
+privateRouter.post("/new/sport", async (req, res) => {
     if (!req.auth.teacher) {
-        res.status(403).render('public/auth/forbidden');
+        res.status(403).render("public/auth/forbidden");
         return;
     }
 
@@ -146,9 +150,9 @@ privateRouter.post('/new/sport', async (req, res) => {
     }
 });
 
-privateRouter.get('/new/performance/:sport?/:student?', async (req, res) => {
+privateRouter.get("/new/performance/:sport?/:student?", async (req, res) => {
     if (!req.auth.teacher) {
-        res.status(403).render('public/auth/forbidden');
+        res.status(403).render("public/auth/forbidden");
         return;
     }
 
@@ -179,7 +183,7 @@ privateRouter.get('/new/performance/:sport?/:student?', async (req, res) => {
             }
         }
 
-        res.render('private/new/performance', {
+        res.render("private/new/performance", {
             csrfToken: req.csrfToken(),
             sports: sports,
             students: students,
@@ -191,9 +195,9 @@ privateRouter.get('/new/performance/:sport?/:student?', async (req, res) => {
     }
 });
 
-privateRouter.post('/new/performance', async (req, res) => {
+privateRouter.post("/new/performance", async (req, res) => {
     if (!req.auth.teacher) {
-        res.status(403).render('public/auth/forbidden');
+        res.status(403).render("public/auth/forbidden");
         return;
     }
 

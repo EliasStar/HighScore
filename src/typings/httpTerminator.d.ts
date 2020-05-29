@@ -1,4 +1,4 @@
-declare module 'http-terminator' {
+declare module "http-terminator" {
     import { Server } from "net";
 
     interface HttpTerminatorOptions {

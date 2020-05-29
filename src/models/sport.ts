@@ -1,4 +1,4 @@
-import mongo, { Model, Document } from 'mongoose';
+import mongo, { Model, Document } from "mongoose";
 import performanceSchema from "./performance";
 
 const sportSchema = new mongo.Schema({
@@ -23,17 +23,17 @@ const sportSchema = new mongo.Schema({
     }
 });
 
-sportSchema.pre('validate', function (nxt) {
-    this._id = (<string>this.get('name')).replace(/[^a-zA-Z0-9\.\-]+/g, '');
+sportSchema.pre("validate", function (nxt) {
+    this._id = (<string>this.get("name")).replace(/[^a-zA-Z0-9\.\-]+/g, "");
 
     if (this._id === "sport" || this._id === "sports") {
-        throw new RangeError('Names containing the words "sport" and "sports" as their only alphanumeric parts are not allowed!');
+        throw new RangeError("Names containing the words "sport" and "sports" as their only alphanumeric parts are not allowed!");
     }
 
     nxt();
 });
 
-sportSchema.static('initSports', async function (this: Model<Document>) {
+sportSchema.static("initSports", async function (this: Model<Document>) {
     const sports = await this.find().exec();
 
     sports.forEach(s => {
@@ -45,4 +45,4 @@ interface SportModel extends Model<Document> {
     initSports(): Promise<void>;
 }
 
-export default mongo.model<Document, SportModel>('Sport', sportSchema);
+export default mongo.model<Document, SportModel>("Sport", sportSchema);

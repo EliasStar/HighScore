@@ -1,8 +1,8 @@
-window.addEventListener('load', () => {
-    document.getElementById('add-button').addEventListener('click', () => getContainer('/private/new/sport'));
+window.addEventListener("load", () => {
+    document.getElementById("add-button").addEventListener("click", () => getContainer("/private/new/sport"));
 
-    const genderElem = document.getElementById('gender');
-    const classElem = document.getElementById('class');
+    const genderElem = document.getElementById("gender");
+    const classElem = document.getElementById("class");
 
     const onOptionChanged = () => {
         setParams({
@@ -12,8 +12,8 @@ window.addEventListener('load', () => {
         refreshContainer();
     }
 
-    genderElem.addEventListener('change', onOptionChanged);
-    classElem.addEventListener('change', onOptionChanged);
+    genderElem.addEventListener("change", onOptionChanged);
+    classElem.addEventListener("change", onOptionChanged);
 
     setParams({
         gender: genderElem.value,
