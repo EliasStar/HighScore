@@ -1,19 +1,19 @@
-window.addEventListener('load', initContainer);
+window.addEventListener("load", initContainer);
 
 function initContainer(prevLocation) {
-    document.querySelectorAll('[data-location=back]').forEach(elem => {
+    document.querySelectorAll("[data-location=back]").forEach(elem => {
         elem.setAttribute("data-location", prevLocation);
     });
 
-    document.querySelectorAll('.get-button').forEach(elem => {
+    document.querySelectorAll(".get-button").forEach(elem => {
         elem.addEventListener("click", onGETButtonPressed);
     });
 
-    document.querySelectorAll('.post-button').forEach(elem => {
+    document.querySelectorAll(".post-button").forEach(elem => {
         elem.addEventListener("click", onPOSTButtonPressed);
     });
 
-    document.querySelectorAll('.delete-button').forEach(elem => {
+    document.querySelectorAll(".delete-button").forEach(elem => {
         elem.addEventListener("click", onDELETEButtonPressed);
     });
 }
@@ -22,19 +22,19 @@ function onGETButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
     elem = elem.nodeType == 3 ? elem.parentNode : elem;
 
-    getContainer(elem.getAttribute('data-location'));
+    getContainer(elem.getAttribute("data-location"));
 }
 
 function onPOSTButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
     elem = elem.nodeType == 3 ? elem.parentNode : elem;
 
-    const form = document.getElementById(elem.getAttribute('data-formular'));
+    const form = document.getElementById(elem.getAttribute("data-formular"));
 
     let data = {};
     let abort = false;
 
-    for (const input of form.querySelectorAll('input')) {
+    for (const input of form.querySelectorAll("input")) {
         if (input.required && input.value === "") {
             input.classList.add("input-wrong");
             input.addEventListener("click", () => input.classList.remove("input-wrong"));
@@ -44,7 +44,7 @@ function onPOSTButtonPressed(evt) {
         data[input.name] = input.value;
     }
 
-    for (const select of form.querySelectorAll('select')) {
+    for (const select of form.querySelectorAll("select")) {
         if (select.value === "") {
             select.classList.add("input-wrong");
             select.addEventListener("click", () => select.classList.remove("input-wrong"));
@@ -56,12 +56,12 @@ function onPOSTButtonPressed(evt) {
 
     if (abort) return;
 
-    postData(elem.getAttribute('data-location'), form.getAttribute('data-csrf-token'), data);
+    postData(elem.getAttribute("data-location"), form.getAttribute("data-csrf-token"), data);
 }
 
 function onDELETEButtonPressed(evt) {
     let elem = evt.target ? evt.target : e.srcElement;
     elem = elem.nodeType == 3 ? elem.parentNode : elem;
 
-    deleteData(elem.getAttribute('data-location'), elem.getAttribute('data-csrf-token'));
+    deleteData(elem.getAttribute("data-location"), elem.getAttribute("data-csrf-token"));
 }

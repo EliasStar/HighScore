@@ -7,8 +7,8 @@ declare namespace Express {
         };
 
         filter: {
-            gender: 'male' | 'female' | 'both';
-            class: string;
+            gender: "male" | "female" | "both";
+            class: "ALL" | string;
         };
     }
 }

@@ -1,4 +1,4 @@
-import mongo from 'mongoose';
+import mongo from "mongoose";
 
 export default new mongo.Schema({
     student: {

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 @font-face {
     font-family: "Glyphicons Halflings";
@@ -68,7 +68,7 @@
 
 body {
     background-color: var(--background-color);
-    font-family: 'Raleway', 'Roboto', sans-serif;
+    font-family: "Raleway", "Roboto", sans-serif;
     color: var(--text-color);
     overflow-y: hidden;
 }
@@ -110,7 +110,7 @@ main {
 }
 
 .ui {
-    font-family: 'Raleway', 'Roboto', sans-serif;
+    font-family: "Raleway", "Roboto", sans-serif;
     font-size: 14px;
     line-height: 1.6;
     padding: 6px 12px;
@@ -396,7 +396,7 @@ main {
 }
 
 #options .input {
-    font-family: 'Raleway', 'Roboto', sans-serif;
+    font-family: "Raleway", "Roboto", sans-serif;
     font-size: 14px;
     height: var(--footer-button-size);
 }
