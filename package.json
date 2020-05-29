@@ -21,8 +21,7 @@
   "main": "mainServer",
   "scripts": {
     "start": "docker-compose up -d",
-    "stop": "docker-compose down",
-    "restart": "docker-compose restart"
+    "stop": "docker-compose down"
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",
