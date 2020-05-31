@@ -5,7 +5,7 @@
     <div class="container">
         <header>Übersicht</header>
         <div class="content">
-            {{#if sports.length}}
+            {{#if entries.length}}
                 <table class="table">
                     <thead>
                         <tr>
@@ -15,13 +15,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each sports}}
+                        {{#each entries}}
                             <tr>
                                 <td>{{name}}</td>
                                 <td>
-                                    {{score}}{{unitSymbol}}
-                                    {{#if @root.teacher}}
-                                        ({{student}})
+                                    {{#if filled}}
+                                        {{score}}{{unitSymbol}}
+                                        {{#if @root.teacher}}
+                                            ({{student}})
+                                        {{/if}}
                                     {{/if}}
                                 </td>
                                 <td>

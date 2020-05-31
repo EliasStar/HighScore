@@ -1,10 +1,8 @@
 <div id="current-container" data-location="/private/sport/{{sport.id}}/{{student.id}}">
     <div class="container">
         <p id="path">
-            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span>
-            /
-            <span class="get-button clickable link hover" data-location="/private/sport/{{sport.id}}">{{sport.name}}</span>
-            /
+            <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> /
+            <span class="get-button clickable link hover" data-location="/private/sport/{{sport.id}}">{{sport.name}}</span> /
             {{student.name.last}} {{student.name.first}}
         </p>
     </div>
@@ -22,30 +20,39 @@
                 <p class="error-description"></p>
             </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>{{sport.unit}}</th>
-                        <th>Lehrer</th>
-                        {{#if teacher}}
-                            <th></th>
-                        {{/if}}
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each entries}}
+            {{#if entries.length}}
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>{{score}}{{@root.sport.unitSymbol}}</td>
-                            <td>{{teacher}}</td>
-                            {{#if @root.teacher}}
-                                <td>
-                                    <span class="delete-button clickable btn-icon icon icon-remove-sign" data-location="/private/sport/{{@root.sport.id}}/{{@root.student.id}}/{{id}}" data-csrf-token="{{@root.csrfToken}}"></span>
-                                </td>
+                            <th>{{sport.unit}}</th>
+                            <th>Lehrer</th>
+                            {{#if teacher}}
+                                <th></th>
                             {{/if}}
                         </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {{#each entries}}
+                            <tr>
+                                <td>{{score}}{{@root.sport.unitSymbol}}</td>
+                                <td>{{teacher}}</td>
+                                {{#if @root.teacher}}
+                                    <td>
+                                        <span class="delete-button clickable btn-icon icon icon-remove-sign" data-location="/private/sport/{{@root.sport.id}}/{{@root.student.id}}/{{id}}" data-csrf-token="{{@root.csrfToken}}"></span>
+                                    </td>
+                                {{/if}}
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{else}}
+                <div class="info-message">
+                    <p>Es sind keine Leistungen eingetragen.</p>
+                    {{#if teacher}}
+                        <p>Erstellen Sie einen neuen Eintrag, indem Sie oben rechts auf den Knopf drücken.</p>
+                    {{/if}}
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>
