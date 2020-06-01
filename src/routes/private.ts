@@ -1,8 +1,10 @@
 import express from "express";
 import mongo from "mongoose";
 
+import { getOverviewEntries } from './index';
+
 import Sport from "../models/sport";
-import performanceSchema from "../models/performance";
+import { performanceSchema, PerformanceDocument } from "../models/performance";
 import * as Student from "../models/student";
 
 const privateRouter = express.Router();
@@ -16,11 +18,9 @@ privateRouter.use((req, res, nxt) => {
 });
 
 privateRouter.get("/overview", async (req, res) => {
-    const sports = await Sport.find();
-
     res.render("private/overview", {
         teacher: req.auth.teacher,
-        sports: sports
+        entries: await getOverviewEntries(req)
     });
 });
 
@@ -51,7 +51,7 @@ privateRouter.get("/sport/:id", async (req, res) => {
                     name: Student.nameForID(student.id)
                 },
                 score: doc.score,
-                entry: true
+                filled: true
             };
 
             if (req.filter.class !== "ALL") return {
@@ -59,7 +59,7 @@ privateRouter.get("/sport/:id", async (req, res) => {
                     id: student.id,
                     name: Student.nameForID(student.id)
                 },
-                entry: false
+                filled: false
             };
         }).filter(entry => entry != null);
 
@@ -79,6 +79,7 @@ privateRouter.get("/sport/:id", async (req, res) => {
 
 privateRouter.get("/sport/:sport/:student", async (req, res) => {
     //! Check if student may access info
+    //! fix path if student and table layout
     try {
         const sport = await Sport.findById(req.params.sport);
         if (!sport) { throw null; }
@@ -175,6 +176,7 @@ privateRouter.post("/new/sport", async (req, res) => {
 });
 
 privateRouter.get("/new/performance/:sport?/:student?", async (req, res) => {
+    //Fix duplicate selects
     if (!req.auth.teacher) {
         res.status(403).render("public/auth/forbidden");
         return;

@@ -1,6 +1,6 @@
-import mongo from "mongoose";
+import mongo, { Document, Model } from "mongoose";
 
-export default new mongo.Schema({
+export const performanceSchema = new mongo.Schema({
     student: {
         type: String,
         trim: true,
@@ -24,3 +24,9 @@ export default new mongo.Schema({
         expires: 0
     }
 });
+
+export interface PerformanceDocument extends Document {
+    student: string;
+    score: number;
+    teacher: string;
+}

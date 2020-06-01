@@ -3,7 +3,7 @@ declare namespace Express {
         auth: {
             authenticated?: boolean;
             teacher?: boolean;
-            id?: number | string;
+            id?: string;
         };
 
         filter: {

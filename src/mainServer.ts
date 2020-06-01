@@ -73,8 +73,8 @@ app.use((req, res, nxt) => {
     //! Mock Auth
     req.auth = {
         authenticated: true,
-        teacher: true,
-        id: "BueK"
+        teacher: false,
+        id: "40501620190009"
     };
 
     req.filter = {

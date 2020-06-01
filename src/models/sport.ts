@@ -1,5 +1,5 @@
 import mongo, { Model, Document } from "mongoose";
-import performanceSchema from "./performance";
+import { performanceSchema, PerformanceDocument } from "./performance";
 
 const sportSchema = new mongo.Schema({
     _id: {
@@ -37,7 +37,7 @@ sportSchema.static("initSports", async function (this: Model<Document>) {
     const sports = await this.find().exec();
 
     sports.forEach(s => {
-        mongo.model(s._id, performanceSchema, s._id);
+        mongo.model<PerformanceDocument>(s._id, performanceSchema, s._id);
     });
 });
 

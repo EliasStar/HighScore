@@ -17,17 +17,17 @@
                     <tbody>
                         {{#each entries}}
                             <tr>
-                                <td>{{name}}</td>
+                                <td>{{sport.name}}</td>
                                 <td>
                                     {{#if filled}}
-                                        {{score}}{{unitSymbol}}
+                                        {{score}}{{sport.unitSymbol}}
                                         {{#if @root.teacher}}
                                             ({{student}})
                                         {{/if}}
                                     {{/if}}
                                 </td>
                                 <td>
-                                    <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{id}}"></span>
+                                    <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{sport.id}}"></span>
                                 </td>
                             </tr>
                         {{/each}}
