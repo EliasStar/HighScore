@@ -33,11 +33,11 @@ privateRouter.get("/sport/:id", async (req, res) => {
         const sport = await Sport.findById(req.params.id);
         if (sport == null) throw null;
 
-        const Performance = mongo.model(sport.id);
+        const Performance = mongo.model<PerformanceDocument>(sport.id);
 
         const students = Student.find(req.filter.gender, req.filter.class);
 
-        const docs: { _id: string, score: number }[] = await Performance.aggregate([
+        const docs = await Performance.aggregate<{ _id: string, score: number }>([
             { $match: { student: { $in: students.map(student => student.id) } } },
             { $group: { _id: "$student", "score": { $max: "$score" } } }
         ]);
@@ -78,25 +78,31 @@ privateRouter.get("/sport/:id", async (req, res) => {
 });
 
 privateRouter.get("/sport/:sport/:student", async (req, res) => {
-    //! Check if student may access info
-    //! fix path if student and table layout
     try {
         const sport = await Sport.findById(req.params.sport);
-        if (!sport) { throw null; }
+        if (sport == null) throw null;
 
-        const student = Student.findById(req.params.student);
-        if (!student) { throw null; }
+        const student = Student.findById(req.auth.teacher ? req.params.student : req.auth.id || "");
+        if (student == null) { throw null; }
 
-        const Performance = mongo.model(sport.id);
+        const Performance = mongo.model<PerformanceDocument>(sport.id);
 
-        const entries = await Performance.find({ student: req.params.student });
+        const entries = await Performance.find({ student: req.params.student }).sort({ score: "descending" });
 
         res.render("private/student", {
             csrfToken: req.csrfToken(),
             teacher: req.auth.teacher,
-            sport: sport,
-            student: student,
-            entries: entries
+            sport: {
+                id: sport._id,
+                name: sport.name,
+                unit: sport.unit,
+                unitSymbol: sport.unitSymbol
+            },
+            student: {
+                id: student.id,
+                name: student.name
+            },
+            entries: entries.map(entry => ({ id: entry._id, score: entry.score, teacher: entry.teacher }))
         });
     } catch (err) {
         res.redirect(404, "/private/overview");

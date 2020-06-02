@@ -2,8 +2,12 @@
     <div class="container">
         <p id="path">
             <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> /
-            <span class="get-button clickable link hover" data-location="/private/sport/{{sport.id}}">{{sport.name}}</span> /
-            {{student.name.last}} {{student.name.first}}
+            {{#if teacher}}
+                <span class="get-button clickable link hover" data-location="/private/sport/{{sport.id}}">{{sport.name}}</span> /
+                {{student.name.last}} {{student.name.first}}
+            {{else}}
+                {{sport.name}}
+            {{/if}}
         </p>
     </div>
     <div class="container">

@@ -32,7 +32,7 @@ export async function getOverviewEntries(req: express.Request) {
 
         const students = req.auth.teacher ? Student.find(req.filter.gender, req.filter.class).map(student => student.id) : [req.auth.id || ""];
 
-        const doc = await Performance.findOne({ student: { $in: students } }).sort({ score: "descending" }).exec();
+        const doc = await Performance.findOne({ student: { $in: students } }).sort({ score: "descending" });
 
         if (doc != null) return {
             sport: {
