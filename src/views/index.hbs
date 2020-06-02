@@ -47,7 +47,7 @@
         </main>
         <footer id="footer">
             <span id="logo" class="clickable hover">
-                <img src="/public/img/logo.jpg" alt="Dachsberg Logo" />
+                <img src="/public/img/logo.png" alt="Dachsberg Logo" />
                 <h1>HighScore</h1>
             </span>
 
@@ -78,15 +78,17 @@
             <span id="buttons">
                 {{#if teacher}}
                     <button id="add-button" class="btn-normal clickable" type="button">
-                        <img src="/public/img/plus.svg" alt="Neuer Sport">
+                        <img class="light-mode-only" src="/public/img/light/plus.svg" alt="Neuer Sport">
+                        <img class="dark-mode-only" src="/public/img/dark/plus.svg" alt="Neuer Sport">
                     </button>
                 {{/if}}
                 <button id="theme-button" class="btn-normal clickable" type="button">
-                    <img id="icon-dark" src="/public/img/dark.svg" alt="Theme ändern">
-                    <img id="icon-light" src="/public/img/light.svg" alt="Theme ändern">
+                    <img id="icon-light" class="light-mode-only" src="/public/img/light/theme.svg" alt="Theme ändern">
+                    <img id="icon-dark" class="dark-mode-only" src="/public/img/dark/theme.svg" alt="Theme ändern">
                 </button>
                 <button id="dropup-button" class="btn-normal clickable" type="button">
-                    <img src="/public/img/more.svg" alt="Mehr">
+                    <img class="light-mode-only" src="/public/img/light/more.svg" alt="Mehr">
+                    <img class="dark-mode-only" src="/public/img/dark/more.svg" alt="Mehr">
                 </button>
                 <nav id="dropup">
                     <div id="about-button" class="link hover clickable">Über</div>

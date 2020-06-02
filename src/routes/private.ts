@@ -73,17 +73,17 @@ privateRouter.get("/sport/:id", async (req, res) => {
             entries: entries
         });
     } catch (err) {
-        res.redirect(404, "/private/overview");
+        res.redirect(303, "/private/overview");
     }
 });
 
 privateRouter.get("/sport/:sport/:student", async (req, res) => {
     try {
         const sport = await Sport.findById(req.params.sport);
-        if (sport == null) throw null;
+        if (sport == null) throw "sport";
 
         const student = Student.findById(req.auth.teacher ? req.params.student : req.auth.id || "");
-        if (student == null) { throw null; }
+        if (student == null) throw "student";
 
         const Performance = mongo.model<PerformanceDocument>(sport.id);
 
@@ -105,7 +105,13 @@ privateRouter.get("/sport/:sport/:student", async (req, res) => {
             entries: entries.map(entry => ({ id: entry._id, score: entry.score, teacher: entry.teacher }))
         });
     } catch (err) {
-        res.redirect(404, "/private/overview");
+        if (err === "sport") {
+            res.redirect(303, "/private/overview");
+        } else if (err === "student") {
+            res.redirect(303, `/private/sport/${req.params.sport}`);
+        } else {
+            res.status(500).send("Something went wrong. Try reloading the page!");
+        }
     }
 });
 
@@ -115,22 +121,23 @@ privateRouter.delete("/sport/:sport/:student/:id", async (req, res) => {
         return;
     }
 
-    //! Check if not deleting sport
     try {
-        const Performance = mongo.model(req.params.sport);
+        const sport = await Sport.findById(req.params.sport);
+        if (sport == null) throw "sport";
 
-        await Performance.remove({ _id: req.params.id, student: req.params.student });
+        const student = Student.findById(req.params.student);
+        if (student == null) throw "student";
+
+        await mongo.model<PerformanceDocument>(sport.id).remove({ _id: req.params.id, student: student.id });
 
         res.redirect(303, `/private/sport/${req.params.sport}/${req.params.student}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
-        switch (err.name) {
-            case "MissingSchemaError":
-                res.status(400).send("Cannot find specified sport. Try reloading the page!");
-                break;
-
-            default:
-                res.status(500).send("Something went wrong while trying to save the sport. Try again!");
-                break;
+        if (err === "sport") {
+            res.status(400).send("Cannot find sport. Try reloading the page!");
+        } else if (err === "student") {
+            res.status(400).send("Cannot find student. Try reloading the page!");
+        } else {
+            res.status(500).send("Something went wrong while trying to delete the performance. Try again!");
         }
     }
 });
@@ -223,7 +230,7 @@ privateRouter.get("/new/performance/:sport?/:student?", async (req, res) => {
             studentSelected: studentSelected
         });
     } catch (err) {
-        res.redirect(404, "/private/overview");
+        res.redirect(303, "/private/overview");
     }
 });
 
@@ -256,7 +263,7 @@ privateRouter.post("/new/performance", async (req, res) => {
                 break;
 
             default:
-                res.status(500).send("Something went wrong while trying to save the sport. Try again!");
+                res.status(500).send("Something went wrong while trying to save the performance. Try again!");
                 break;
         }
     }

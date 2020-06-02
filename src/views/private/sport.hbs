@@ -7,7 +7,7 @@
     <div class="container">
         <header>
             {{sport.name}}
-            <span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}"></span>
+            <span class="get-button right clickable btn-icon icon icon-add" data-location="/private/new/performance/{{sport.id}}"></span>
         </header>
         <div class="content">
             {{#if entries.length}}
@@ -26,13 +26,13 @@
                                 {{#if filled}}
                                     <td>{{score}}{{@root.sport.unitSymbol}}</td>
                                     <td>
-                                        <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
-                                        <span class="get-button clickable btn-icon icon icon-circle-arrow-right" data-location="/private/sport/{{@root.sport.id}}/{{student.id}}"></span>
+                                        <span class="get-button clickable btn-icon icon icon-add" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
+                                        <span class="get-button clickable btn-icon icon icon-show" data-location="/private/sport/{{@root.sport.id}}/{{student.id}}"></span>
                                     </td>
                                 {{else}}
                                     <td></td>
                                     <td>
-                                        <span class="get-button clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
+                                        <span class="get-button clickable btn-icon icon icon-add" data-location="/private/new/performance/{{@root.sport.id}}/{{student.id}}"></span>
                                     </td>
                                 {{/if}}
                             </tr>

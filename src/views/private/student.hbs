@@ -15,7 +15,7 @@
             {{sport.name}}
             {{#if teacher}}
                 von {{student.name.first}}
-                <span class="get-button right clickable btn-icon icon icon-plus-sign" data-location="/private/new/performance/{{sport.id}}/{{student.id}}"></span>
+                <span class="get-button right clickable btn-icon icon icon-add" data-location="/private/new/performance/{{sport.id}}/{{student.id}}"></span>
             {{/if}}
         </header>
         <div class="content">
@@ -42,7 +42,7 @@
                                 <td>{{teacher}}</td>
                                 {{#if @root.teacher}}
                                     <td>
-                                        <span class="delete-button clickable btn-icon icon icon-remove-sign" data-location="/private/sport/{{@root.sport.id}}/{{@root.student.id}}/{{id}}" data-csrf-token="{{@root.csrfToken}}"></span>
+                                        <span class="delete-button clickable btn-icon icon icon-remove" data-location="/private/sport/{{@root.sport.id}}/{{@root.student.id}}/{{id}}" data-csrf-token="{{@root.csrfToken}}"></span>
                                     </td>
                                 {{/if}}
                             </tr>
