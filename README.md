@@ -16,7 +16,8 @@
   - [x] database integration
   - [x] views
   - [ ] i18n
-  - [ ] xss protection
+  - [x] xss protection
   - [ ] secure db
   - [ ] refactoring
-  - [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)
+  - [ ] about & credits
+  - [x] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)
