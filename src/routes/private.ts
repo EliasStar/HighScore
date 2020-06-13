@@ -157,15 +157,13 @@ privateRouter.post("/new/sport", async (req, res) => {
     }
 
     try {
-        const sport = new Sport({
+        const sport = await new Sport({
             name: req.body.name,
             unit: req.body.unit,
             unitSymbol: req.body.unitSymbol
-        })
+        }).save();
 
-        await sport.save();
-
-        mongo.model(sport.id, performanceSchema, sport.id);
+        mongo.model<PerformanceDocument>(sport.id, performanceSchema, sport.id);
 
         res.redirect(303, `/private/sport/${sport.id}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
@@ -173,6 +171,7 @@ privateRouter.post("/new/sport", async (req, res) => {
             case "RangeError":
                 res.status(400).send(err.message);
                 break;
+
             case "MongoError":
                 res.status(400).send("The provided name is too similar. Choose a diffrent name for the new sport.");
                 break;
@@ -189,12 +188,12 @@ privateRouter.post("/new/sport", async (req, res) => {
 });
 
 privateRouter.get("/new/performance/:sport?/:student?", async (req, res) => {
-    //Fix duplicate selects
     if (!req.auth.teacher) {
         res.status(403).render("public/auth/forbidden");
         return;
     }
 
+    //!Fix duplicate selects
     try {
         const sports: ({ selected?: boolean } & mongo.Document)[] = await Sport.find();
         const students: ({ selected?: boolean } & Student.Student)[] = Student.find(req.filter.gender, req.filter.class);
@@ -241,30 +240,40 @@ privateRouter.post("/new/performance", async (req, res) => {
     }
 
     try {
-        const Performance = mongo.model(req.body.sport);
+        const sport = await Sport.findById(req.body.sport);
+        if (sport == null) throw "sport";
 
-        const entry = new Performance({
-            student: req.body.student,
+        const student = Student.findById(req.body.student);
+        if (student == null) throw "student";
+
+        const Performance = mongo.model<PerformanceDocument>(sport.id);
+
+        await new Performance({
+            student: student.id,
             score: req.body.score,
             teacher: req.auth.id
-        });
-
-        await entry.save();
+        }).save();
 
         res.redirect(303, `/private/sport/${req.body.sport}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
-        switch (err.name) {
-            case "MissingSchemaError":
-                res.status(400).send("Cannot find specified sport. Try reloading the page!");
-                break;
+        if (err === "sport") {
+            res.status(400).send("Cannot find sport. Try reloading the page!");
+        } else if (err === "student") {
+            res.status(400).send("Cannot find student. Try reloading the page!");
+        } else {
+            switch (err.name) {
+                case "MissingSchemaError":
+                    res.status(400).send("Cannot find specified sport in database. Try reloading the page!");
+                    break;
 
-            case "ValidationError":
-                res.status(400).send("Some input are not correct. See if you forgot anything!");
-                break;
+                case "ValidationError":
+                    res.status(400).send("Some input are not correct. See if you forgot anything!");
+                    break;
 
-            default:
-                res.status(500).send("Something went wrong while trying to save the performance. Try again!");
-                break;
+                default:
+                    res.status(500).send("Something went wrong while trying to save the performance. Try again!");
+                    break;
+            }
         }
     }
 });

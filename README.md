@@ -15,8 +15,9 @@
   - [x] routes
   - [x] database integration
   - [x] views
+  - [x] xss protection
+  - [x] refactoring
+  - [x] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)
   - [ ] i18n
-  - [ ] xss protection
   - [ ] secure db
-  - [ ] refactoring
-  - [ ] dark mode (icons: https://codepen.io/sosuke/pen/Pjoqqp)
+  - [ ] back links & new performance view
