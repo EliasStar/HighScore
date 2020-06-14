@@ -33,7 +33,7 @@ privateRouter.get("/sport/:id", async (req, res) => {
         const sport = await Sport.findById(req.params.id);
         if (sport == null) throw null;
 
-        const Performance = mongo.model<PerformanceDocument>(sport.id);
+        const Performance = mongo.model<PerformanceDocument>(sport._id);
 
         const students = Student.find(req.filter.gender, req.filter.class);
 
@@ -85,7 +85,7 @@ privateRouter.get("/sport/:sport/:student", async (req, res) => {
         const student = Student.findById(req.auth.teacher ? req.params.student : req.auth.id || "");
         if (student == null) throw "student";
 
-        const Performance = mongo.model<PerformanceDocument>(sport.id);
+        const Performance = mongo.model<PerformanceDocument>(sport._id);
 
         const entries = await Performance.find({ student: req.params.student }).sort({ score: "descending" });
 
@@ -128,7 +128,7 @@ privateRouter.delete("/sport/:sport/:student/:id", async (req, res) => {
         const student = Student.findById(req.params.student);
         if (student == null) throw "student";
 
-        await mongo.model<PerformanceDocument>(sport.id).remove({ _id: req.params.id, student: student.id });
+        await mongo.model<PerformanceDocument>(sport._id).remove({ _id: req.params.id, student: student.id });
 
         res.redirect(303, `/private/sport/${req.params.sport}/${req.params.student}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
@@ -163,9 +163,9 @@ privateRouter.post("/new/sport", async (req, res) => {
             unitSymbol: req.body.unitSymbol
         }).save();
 
-        mongo.model<PerformanceDocument>(sport.id, performanceSchema, sport.id);
+        mongo.model<PerformanceDocument>(sport._id, performanceSchema, sport._id);
 
-        res.redirect(303, `/private/sport/${sport.id}?gender=${req.filter.gender}&class=${req.filter.class}`);
+        res.redirect(303, `/private/sport/${sport._id}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
         switch (err.name) {
             case "RangeError":
@@ -193,40 +193,29 @@ privateRouter.get("/new/performance/:sport?/:student?", async (req, res) => {
         return;
     }
 
-    //!Fix duplicate selects
     try {
-        const sports: ({ selected?: boolean } & mongo.Document)[] = await Sport.find();
-        const students: ({ selected?: boolean } & Student.Student)[] = Student.find(req.filter.gender, req.filter.class);
+        let sports = (await Sport.find()).map(s => ({ id: s._id, name: s.name, unit: s.unit }));
+        let students = Student.find(req.filter.gender, req.filter.class).map(s => ({
+            id: s.id,
+            name: {
+                first: s.name.first,
+                last: s.name.last
+            },
+            class: s.class
+        }));
 
-        let sportSelected = false;
-        let studentSelected = false;
+        const sport = sports.find(s => s.id === req.params.sport);
+        const student = students.find(s => s.id === req.params.student);
 
-        if (req.params.sport) {
-            for (const sport of sports) {
-                if (req.params.sport === sport.id) {
-                    sport.selected = true;
-                    sportSelected = true;
-                    break;
-                }
-            }
-        }
-
-        if (req.params.student) {
-            for (const student of students) {
-                if (req.params.student === student.id.toString()) {
-                    student.selected = true;
-                    studentSelected = true;
-                    break;
-                }
-            }
-        }
+        sports = sports.filter(s => s.id !== req.params.sport);
+        students = students.filter(s => s.id !== req.params.student);
 
         res.render("private/new/performance", {
             csrfToken: req.csrfToken(),
+            sport: sport,
+            student: student,
             sports: sports,
-            students: students,
-            sportSelected: sportSelected,
-            studentSelected: studentSelected
+            students: students
         });
     } catch (err) {
         res.redirect(303, "/private/overview");
@@ -246,7 +235,7 @@ privateRouter.post("/new/performance", async (req, res) => {
         const student = Student.findById(req.body.student);
         if (student == null) throw "student";
 
-        const Performance = mongo.model<PerformanceDocument>(sport.id);
+        const Performance = mongo.model<PerformanceDocument>(sport._id);
 
         await new Performance({
             student: student.id,
@@ -254,7 +243,7 @@ privateRouter.post("/new/performance", async (req, res) => {
             teacher: req.auth.id
         }).save();
 
-        res.redirect(303, `/private/sport/${req.body.sport}?gender=${req.filter.gender}&class=${req.filter.class}`);
+        res.redirect(303, `/private/sport/${sport._id}?gender=${req.filter.gender}&class=${req.filter.class}`);
     } catch (err) {
         if (err === "sport") {
             res.status(400).send("Cannot find sport. Try reloading the page!");

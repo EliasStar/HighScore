@@ -1,13 +1,13 @@
-window.addEventListener("load", () => {
+{
     // DropUp
-    let dropup = document.getElementById("dropup");
+    const dropup = document.getElementById("dropup");
 
     document.getElementById("dropup-button").addEventListener("click", () => {
         dropup.style.display = window.getComputedStyle(dropup).getPropertyValue("display") === "none" ? "block" : "none";
     });
 
     // Theme
-    let theme = localStorage.getItem("theme");
+    const theme = localStorage.getItem("theme");
     if (theme === "light" || theme === "dark") {
         document.documentElement.setAttribute("data-theme", theme);
     }
@@ -24,10 +24,7 @@ window.addEventListener("load", () => {
 
     // Links
     document.getElementById("path-error").addEventListener("click", () => getContainer("/"));
-
     document.getElementById("logo").addEventListener("click", () => getContainer("/"));
-
     document.getElementById("help-button").addEventListener("click", () => getContainer("/public/help"));
-
     document.getElementById("about-button").addEventListener("click", () => getContainer("/public/about"));
-});
+}

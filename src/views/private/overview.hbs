@@ -3,7 +3,12 @@
         <p id="path">Übersicht</p>
     </div>
     <div class="container">
-        <header>Übersicht</header>
+        <header>
+            Übersicht
+            {{#if entries.length}}
+                <span class="get-button right clickable btn-icon icon icon-add" data-location="/private/new/performance"></span>
+            {{/if}}
+        </header>
         <div class="content">
             {{#if entries.length}}
                 <table class="table">

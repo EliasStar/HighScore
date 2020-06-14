@@ -1,4 +1,4 @@
-<div id="current-container" data-location="/private/new/performance">
+<div id="current-container" data-script="/public/js/performance.js">
     <div class="container">
         <p id="path">
             <span class="get-button clickable link hover" data-location="/private/overview">Übersicht</span> / Neue Leistung
@@ -15,25 +15,37 @@
             <div id="new-performance" class="formular" data-csrf-token="{{csrfToken}}">
                 <label for="sport">Sport*:</label>
                 <select class="ui input" name="sport">
-                    {{#unless sportSelected}}
+                    {{#if sport}}
+                        <option value="{{sport.id}}" selected>{{sport.name}}</option>
+                    {{else}}
                         <option value="" hidden selected>Wählen Sie!</option>
-                    {{/unless}}
+                    {{/if}}
+
                     {{#each sports}}
-                        <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                        <option value="{{id}}">{{name}}</option>
                     {{/each}}
                 </select>
 
                 <label for="student">Schüler*:</label>
                 <select class="ui input" name="student">
-                    {{#unless studentSelected}}
+                    {{#if student}}
+                        <option value="{{student.id}}" selected>[{{student.class}}] {{student.name.last}} {{student.name.first}}</option>
+                    {{else}}
                         <option value="" hidden selected>Wählen Sie!</option>
-                    {{/unless}}
+                    {{/if}}
+
                     {{#each students}}
-                        <option value="{{id}}" {{#if selected}}selected{{/if}}>[{{class}}] {{name.last}} {{name.first}}</option>
+                        <option value="{{id}}">[{{class}}] {{name.last}} {{name.first}}</option>
                     {{/each}}
                 </select>
 
-                <label for="score">Leistung*:</label>
+                <label for="score">
+                    {{#if sport}}
+                        {{sport.unit}}*:
+                    {{else}}
+                        Leistung*:
+                    {{/if}}
+                </label>
                 <input class="ui input" type="number" name="score" required>
             </div>
         </div>

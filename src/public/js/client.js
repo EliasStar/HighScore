@@ -1,28 +1,24 @@
-let main;
-let currentContainer;
-let loadingContainer;
-let errorContainer;
+let main = document.querySelector("main");
+let currentContainer = document.getElementById("current-container");
+let loadingContainer = document.getElementById("loading-container");
+let errorContainer = document.getElementById("error-container");
+
+const container = { location: currentContainer.getAttribute("data-location"), current: true };
+
+let currentScript = null;
 
 let params = "";
 let busy = false;
-let containerLocation = "";
 
-window.addEventListener("load", () => {
-    main = document.querySelector("main");
-    currentContainer = document.getElementById("current-container");
-    loadingContainer = document.getElementById("loading-container");
-    errorContainer = document.getElementById("error-container");
-
-    containerLocation = currentContainer.getAttribute("data-location");
-});
+initContainer(container.location);
 
 function setParams(parameter) {
-    params = Object.keys(parameter).map(key => key + "=" + parameter[key]).join("&");
+    params = "?" + Object.keys(parameter).map(key => key + "=" + parameter[key]).join("&");
 }
 
 function refreshContainer() {
-    if (containerLocation !== "") {
-        getContainer(containerLocation);
+    if (container.current) {
+        getContainer(container.location);
     }
 }
 
@@ -85,22 +81,39 @@ async function callFetch(path, init, errorContainerElem) {
     errorDescriptionElem = errorMessageElem.querySelector(".error-description");
 
     try {
-        response = await fetch(path + "?" + params, init);
+        response = await fetch(path + params, init);
 
         if (!response.ok) {
-            let err = new Error(response.status + " " + response.statusText);
+            const err = new Error(response.status + " " + response.statusText);
             err.trace = await response.text();
             throw err;
         } else {
-            let container = new DOMParser().parseFromString(await response.text(), "text/html").getElementById("current-container");
+            const newContainer = new DOMParser().parseFromString(await response.text(), "text/html").getElementById("current-container");
+
+            if (currentScript != null) {
+                currentScript.remove();
+                currentScript = null;
+            }
 
             currentContainer.remove();
             loadingContainer.style.display = "none";
 
-            currentContainer = main.appendChild(container);
+            currentContainer = main.appendChild(newContainer);
+            initContainer(container.location);
 
-            initContainer(containerLocation);
-            containerLocation = currentContainer.getAttribute("data-location");
+            if (newContainer.hasAttribute("data-script")) {
+                const script = document.createElement('script');
+                script.src = newContainer.getAttribute("data-script");
+                script.defer = true;
+                currentScript = document.head.appendChild(script);
+            }
+
+            if (currentContainer.hasAttribute("data-location")) {
+                container.location = currentContainer.getAttribute("data-location");
+                container.current = true;
+            } else {
+                container.current = false;
+            }
         }
     } catch (err) {
         if (err.trace == null || err.trace === "") {

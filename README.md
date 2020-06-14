@@ -19,5 +19,5 @@
   - [x] dark mode
   - [ ] i18n
   - [ ] secure db
-  - [ ] back links & new performance view
+  - [x] back links & new performance view
   - [ ] about & credits

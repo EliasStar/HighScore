@@ -1,5 +1,3 @@
-window.addEventListener("load", initContainer);
-
 function initContainer(prevLocation) {
     document.querySelectorAll("[data-location=back]").forEach(elem => {
         elem.setAttribute("data-location", prevLocation);
