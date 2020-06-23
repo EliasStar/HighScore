@@ -21,3 +21,4 @@
   - [ ] secure db
   - [x] back links & new performance view
   - [ ] about & credits
+  - [ ] admin config

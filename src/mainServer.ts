@@ -26,12 +26,22 @@ const debug = process.env.NODE_ENV === "development";
 const httpPort = parseInt(process.env.HTTP_PORT || "80", 10);
 const httpsPort = parseInt(process.env.HTTPS_PORT || "443", 10);
 const dbURI = process.env.DATABASE_URI;
-const dbName = process.env.DATABASE_NAME;
+const dbName = process.env.DATABASE_NAME || "highscore";
 const cookieSecret = process.env.COOKIE_SECRET;
 const keyPath = process.env.KEY_PATH;
 const certPath = process.env.CERTIFICATE_PATH;
 
-if (dbURI == null || dbName == null || cookieSecret == null || keyPath == null || certPath == null) {
+console.table({
+    "HTTP Port": { "Environment Variable": "HTTP_PORT", Current: httpPort, Default: "80" },
+    "HTTPS Port": { "Environment Variable": "HTTPS_PORT", Current: httpsPort, Default: "443" },
+    "Database URI": { "Environment Variable": "DATABASE_URI", Current: dbURI, Default: "" },
+    "Database Name": { "Environment Variable": "DATABASE_NAME", Current: dbName, Default: "highscore" },
+    "Cookie Secret": { "Environment Variable": "COOKIE_SECRET", Current: cookieSecret, Default: "" },
+    "Key Path": { "Environment Variable": "KEY_PATH", Current: keyPath, Default: "" },
+    "Cert Path": { "Environment Variable": "CERTIFICATE_PATH", Current: certPath, Default: "" },
+});
+
+if (dbURI == null || cookieSecret == null || keyPath == null || certPath == null) {
     console.error("[HighScore] Environment variables are not correctly set!");
     process.exit(32);
 }
@@ -70,6 +80,8 @@ app.use(csurf({
     }
 }));
 app.use((req, res, nxt) => {
+    // Update StudentList
+
     //! Mock Auth
     req.auth = {
         authenticated: true,
@@ -78,8 +90,8 @@ app.use((req, res, nxt) => {
     };
 
     req.filter = {
-        gender: genderFromString(req.query.gender),
-        class: classFromString(req.query.class)
+        gender: genderFromString(req.query.gender as string),
+        class: classFromString(req.query.class as string)
     }
 
     let end = res.end;
@@ -89,7 +101,7 @@ app.use((req, res, nxt) => {
         let queryString = Object.keys(req.query).map(key => key + "=" + req.query[key]).join("&");
         queryString = queryString !== "" ? "?" + queryString : "";
 
-        console.log(`[MainServer] ${req.method}\t${req.path}${queryString}\t${res.statusCode} | ${authenticated}`);
+        console.log(`[MainServer] ${req.method}\t${req.path}${queryString} ${res.statusCode} | ${authenticated}`);
 
         end.apply(res, [arguments[0], arguments[1], arguments[2]]);
     }
