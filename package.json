@@ -3,7 +3,7 @@
   "description": "WebApp for recording performance in physical education.",
   "version": "1.0.0",
   "author": "Elias*",
-  "license": "AGPL-3.0-or-later",
+  "license": "AGPL-3.0-only",
   "homepage": "https://github.com/EliasStar/HighScore#readme",
   "repository": {
     "type": "git",

@@ -81,6 +81,7 @@ app.use(csurf({
 }));
 app.use((req, res, nxt) => {
     // Update StudentList
+    // Send auth request
 
     //! Mock Auth
     req.auth = {
