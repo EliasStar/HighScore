@@ -1,8 +1,10 @@
 import express from "express";
 import mongo from "mongoose";
 
+import { getClasses } from '../api/list';
+
 import Sport from "../models/sport";
-import * as Student from "../models/student";
+import Student from "../models/student";
 import { PerformanceDocument } from '../models/performance';
 
 const router = express.Router();
@@ -20,7 +22,7 @@ router.get("/", async (req, res, nxt) => {
         currentContainer: "private/overview",
         entries: await getOverviewEntries(req),
         teacher: req.auth.teacher,
-        classes: req.auth.teacher ? Student.getClasses() : undefined
+        classes: req.auth.teacher ? getClasses() : undefined
     });
 });
 

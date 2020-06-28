@@ -1,5 +1,5 @@
-import express, { ErrorRequestHandler } from "express";
 import https from "https";
+import express, { ErrorRequestHandler } from "express";
 import { readFile } from "fs";
 import { promisify } from "util";
 import { join } from "path";
@@ -13,13 +13,16 @@ import { createHttpTerminator, HttpTerminator } from "http-terminator";
 
 import redirectHTTP from "./redirectServer"
 
+import client from './api/client';
+import { updateStudentList, checkForListUpdate, getStudents } from './api/list';
+import { authenticate } from './api/auth';
+import { genderFromString, classFromString } from "./api/filter";
+
 import Sport from "./models/sport";
-import { updateStudentList, closeClient, genderFromString, classFromString } from "./models/student"
 
 import indexRouter from "./routes/index";
 import privateRouter from "./routes/private";
 import publicRouter from "./routes/public";
-
 
 //Environment variables
 const debug = process.env.NODE_ENV === "development";
@@ -79,16 +82,18 @@ app.use(csurf({
         return req.body.csrfToken;
     }
 }));
-app.use((req, res, nxt) => {
-    // Update StudentList
-    // Send auth request
+app.use(async (req, res, nxt) => {
+    if (debug) {
+        req.auth = {
+            authenticated: true,
+            teacher: true,
+            id: "HueN"
+        }
+    } else {
+        req.auth = await authenticate(req.cookies);
+    }
 
-    //! Mock Auth
-    req.auth = {
-        authenticated: true,
-        teacher: true,
-        id: "HinJ"
-    };
+    if (getStudents().length === 0 || await checkForListUpdate(req.cookies)) await updateStudentList(req.cookies);
 
     req.filter = {
         gender: genderFromString(req.query.gender as string),
@@ -147,8 +152,7 @@ Promise.all([
         useUnifiedTopology: true,
         useCreateIndex: true
     }),
-    Sport.initSports(),
-    updateStudentList()
+    Sport.initSports()
 ]).then((values) => {
     mainServerTerminator = createHttpTerminator({
         server:
@@ -178,7 +182,7 @@ async function onExitSignalReceived() {
         console.log("[HighScore] Closing database connections...");
         await Promise.all([
             mongo.disconnect(),
-            closeClient()
+            client.close()
         ])
     } catch (err) {
         console.error("[HighScore] Error during shutdown: " + err);

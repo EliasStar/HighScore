@@ -5,7 +5,7 @@ import { getOverviewEntries } from './index';
 
 import Sport from "../models/sport";
 import { performanceSchema, PerformanceDocument } from "../models/performance";
-import * as Student from "../models/student";
+import Student from "../models/student";
 
 const privateRouter = express.Router();
 

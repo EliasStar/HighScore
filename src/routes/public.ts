@@ -1,4 +1,5 @@
 import express from "express";
+
 const publicRouter = express.Router();
 
 publicRouter.get("/about", (req, res) => {
