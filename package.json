@@ -45,7 +45,7 @@
     "hbs": "^4.1.0",
     "helmet": "^3.21.2",
     "http-terminator": "^2.0.2",
-    "mongoose": "^5.9.7",
+    "mongoose": "^6.13.6",
     "tslib": "^1.11.0"
   }
 }
