@@ -83,17 +83,21 @@ app.use(csurf({
     }
 }));
 app.use(async (req, res, nxt) => {
-    if (debug) {
-        req.auth = {
-            authenticated: true,
-            teacher: true,
-            id: "HueN"
+    try {
+        if (debug) {
+            req.auth = {
+                authenticated: true,
+                teacher: true,
+                id: "HueN"
+            }
+        } else {
+            req.auth = await authenticate(req.cookies);
         }
-    } else {
-        req.auth = await authenticate(req.cookies);
-    }
 
-    if (getStudents().length === 0 || await checkForListUpdate(req.cookies)) await updateStudentList(req.cookies);
+        if (getStudents().length === 0 || await checkForListUpdate(req.cookies)) await updateStudentList(req.cookies);
+    } catch {
+        console.error("no api");
+    }
 
     req.filter = {
         gender: genderFromString(req.query.gender as string),

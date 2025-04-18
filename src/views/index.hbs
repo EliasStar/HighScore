@@ -1,102 +1,102 @@
 <html lang="" data-theme="light">
 
-    <head>
-        <title>HighScore</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" type="image/x-icon" href="/public/img/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="/public/css/style.css">
-        <script src="/public/js/index.js" defer></script>
-        <script src="/public/js/container.js" defer></script>
-        <script src="/public/js/client.js" defer></script>
-        {{#if teacher}}
-            <script src="/public/js/teacher.js" defer></script>
-        {{/if}}
-    </head>
+<head>
+    <title>HighScore</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+    <script src="/public/js/index.js" defer></script>
+    <script src="/public/js/container.js" defer></script>
+    <script src="/public/js/client.js" defer></script>
+    {{#if teacher}}
+    <script src="/public/js/teacher.js" defer></script>
+    {{/if}}
+</head>
 
-    <body>
-        <main>
-            <div id="loading-container">
-                <div class="container">
-                    <p id="path">Laden...</p>
+<body>
+    <main>
+        <div id="loading-container">
+            <div class="container">
+                <p id="path">Laden...</p>
+            </div>
+            <div class="container">
+                <header>Laden...</header>
+                <div class="content">
+                    <span class="spin icon icon-refresh"></span>
                 </div>
-                <div class="container">
-                    <header>Laden...</header>
-                    <div class="content">
-                        <span class="spin icon icon-refresh"></span>
+            </div>
+        </div>
+        <div id="error-container">
+            <div class="container">
+                <p id="path">
+                    <span id="path-error" class="clickable link hover">Übersicht</span> / Fehler
+                </p>
+            </div>
+            <div class="container">
+                <header>Fehler</header>
+                <div class="content">
+                    <div class="error-message">
+                        <p class="error-title"></p>
+                        <p class="error-description"></p>
                     </div>
                 </div>
             </div>
-            <div id="error-container">
-                <div class="container">
-                    <p id="path">
-                        <span id="path-error" class="clickable link hover">Übersicht</span> / Fehler
-                    </p>
-                </div>
-                <div class="container">
-                    <header>Fehler</header>
-                    <div class="content">
-                        <div class="error-message">
-                            <p class="error-title"></p>
-                            <p class="error-description"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{> (lookup . "currentContainer") }}
-        </main>
-        <footer id="footer">
-            <span id="logo" class="clickable hover">
-                <img src="/public/img/logo.png" alt="Dachsberg Logo" />
-                <h1>HighScore</h1>
-            </span>
+        </div>
+        {{> (lookup . "currentContainer") }}
+    </main>
+    <footer id="footer">
+        <span id="logo" class="clickable hover">
+            <img src="/public/img/logo.png" alt="Dachsberg Logo" />
+            <h1>HighScore</h1>
+        </span>
 
 
-            <span id="options">
-                <span>
-                    {{#if teacher}}
-                        <label for="gender">Geschlecht:</label>
-                        <select id="gender" class="input">
-                            <option value="A" selected>Alle</option>
-                            <option value="F">Mädchen</option>
-                            <option value="M">Buben</option>
-                        </select>
-
-                        <span class="right">
-                            <label for="class">Klasse:</label>
-                            <select id="class" class="input">
-                                <option value="ALL" selected>Alle</option>
-                                {{#each classes}}
-                                    <option value="{{this}}">{{this}}</option>
-                                {{/each}}
-                            </select>
-                        </span>
-                    {{/if}}
-                </span>
-            </span>
-
-            <span id="buttons">
+        <span id="options">
+            <span>
                 {{#if teacher}}
-                    <button id="add-button" class="btn-normal clickable" type="button">
-                        <img class="light-mode-only" src="/public/img/light/plus.svg" alt="Neuer Sport">
-                        <img class="dark-mode-only" src="/public/img/dark/plus.svg" alt="Neuer Sport">
-                    </button>
+                <label for="gender">Geschlecht:</label>
+                <select id="gender" class="input">
+                    <option value="A" selected>Alle</option>
+                    <option value="F">Mädchen</option>
+                    <option value="M">Buben</option>
+                </select>
+
+                <span class="right">
+                    <label for="class">Klasse:</label>
+                    <select id="class" class="input">
+                        <option value="ALL" selected>Alle</option>
+                        {{#each classes}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    </select>
+                </span>
                 {{/if}}
-                <button id="theme-button" class="btn-normal clickable" type="button">
-                    <img id="icon-light" class="light-mode-only" src="/public/img/light/theme.svg" alt="Theme ändern">
-                    <img id="icon-dark" class="dark-mode-only" src="/public/img/dark/theme.svg" alt="Theme ändern">
-                </button>
-                <button id="dropup-button" class="btn-normal clickable" type="button">
-                    <img class="light-mode-only" src="/public/img/light/more.svg" alt="Mehr">
-                    <img class="dark-mode-only" src="/public/img/dark/more.svg" alt="Mehr">
-                </button>
-                <nav id="dropup">
-                    <div id="about-button" class="link hover clickable">Über</div>
-                    <div>Lang buttons lol</div>
-                    <div id="help-button" class="link hover clickable">Hilfe</div>
-                </nav>
             </span>
-        </footer>
-    </body>
+        </span>
+
+        <span id="buttons">
+            {{#if teacher}}
+            <button id="add-button" class="btn-normal clickable" type="button">
+                <img class="light-mode-only" src="/public/img/light/plus.svg" alt="Neuer Sport">
+                <img class="dark-mode-only" src="/public/img/dark/plus.svg" alt="Neuer Sport">
+            </button>
+            {{/if}}
+            <button id="theme-button" class="btn-normal clickable" type="button">
+                <img id="icon-light" class="light-mode-only" src="/public/img/light/theme.svg" alt="Theme ändern">
+                <img id="icon-dark" class="dark-mode-only" src="/public/img/dark/theme.svg" alt="Theme ändern">
+            </button>
+            <button id="dropup-button" class="btn-normal clickable" type="button">
+                <img class="light-mode-only" src="/public/img/light/more.svg" alt="Mehr">
+                <img class="dark-mode-only" src="/public/img/dark/more.svg" alt="Mehr">
+            </button>
+            <nav id="dropup">
+                <div id="about-button" class="link hover clickable">Über</div>
+                <div>Sprache</div>
+                <div id="help-button" class="link hover clickable">Hilfe</div>
+            </nav>
+        </span>
+    </footer>
+</body>
 
 </html>
